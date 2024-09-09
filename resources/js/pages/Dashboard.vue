@@ -35,16 +35,17 @@
                     console.log(error)
                 })
             },
-        },
-        computed: {
             checkIfVerified() {
                 const store = useAuthStore()
                 const verified = store.user?.email_verified_at
                 this.isVerified = verified == null
             },
         },
+        computed: {
+
+        },
         mounted() {
-            this.checkIfVerified
+            this.checkIfVerified()
         }
     }
 </script>
