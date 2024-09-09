@@ -14,7 +14,7 @@
                         <tr>
                             <th>Business Name</th>
                             <th>Address</th>
-                            <th>Permit Expiry Date</th>
+                            <th>Permit Status</th>
                             <!-- <th>Date Validated</th> -->
                             <th>Actions</th>
                         </tr>
@@ -23,7 +23,7 @@
                         <tr v-for="(business, index) in this.businesses" :key="index">
                             <td class="p-2 border-b text-center text-blue-200 font-bold">{{ business.business_name }}</td>
                             <td class="p-2 border-b text-center text-green-200">{{ business.business_address }}</td>
-                            <td class="p-2 border-b text-center text-indigo-200">{{ business.valid_until }}</td>
+                            <td class="p-2 border-b text-center text-indigo-200">{{ getStatus(business.permit_request) }}</td>
                             <!-- <td>{{  }}</td> -->
                              <td class="p-2 border-b">
                                 <div class="flex flex-wrap gap-2 justify-center items-center">
@@ -63,14 +63,26 @@
                 axios.post('/business', { user_id: store.user.id })
                 .then(response => {
                     this.businesses = response.data?.business
+                    console.log(response)
                 })
                 .catch(error => {
                     console.log(error)
                 })
+            },
+            getStatus(request) {
+                const date = new Date();
+                if (request) {
+                    request.map(dat => {
+                        if (new Date(dat.created_at).getFullYear() == date.getFullYear() && dat.status == 'confirmed') {
+                            return 'Valid'
+                        }
+                    })
+                }
+                return 'Invalid'
             }
         },
         mounted() {
             this.getBusiness()
-        }
+        },
     }
 </script>

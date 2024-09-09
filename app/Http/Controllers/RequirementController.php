@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PermitRequirement;
+use App\Models\BusinessPermitRequest;
 use App\Models\User;
 
 class RequirementController extends Controller
@@ -34,6 +35,17 @@ class RequirementController extends Controller
         $requirement->update([
             $request->input('column') => $path
         ]);
+        $permit_request = BusinessPermitRequest::find($requirement->request_id);
+        if ($permit_request->request_type == 'renewal') {
+
+        } else {
+            if ($requirement->barangay_clearance && $requirement->cedula && $requirement->business_registration
+                && $requirement->bir_certificate_of_registration && $requirement->ecc_cnc_denr) {
+                    $permit_request->update([
+                        'status' => 'pending'
+                    ]);
+                }
+        }
         return response()->json([
             'requirement' => $requirement,
             'path' => $path,

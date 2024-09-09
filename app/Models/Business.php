@@ -14,7 +14,9 @@ class Business extends Model
         'business_name',
         'business_address',
         'date_established',
-        'valid_until',
+        'type_of_organization',
+        'dti_registration_number',
+        'tin',
     ];
 
     public function permitRequest()

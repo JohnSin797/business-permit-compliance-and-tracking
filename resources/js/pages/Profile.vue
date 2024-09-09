@@ -1,11 +1,63 @@
 <template>
-    <div class="w-full min-h-screen flex flex-col md:flex-row justify-center items-center gap-10">
-        <section class="w-96 rounded-lg shadow-xl p-10 bg-slate-900">
+    <div class="w-full min-h-screen flex flex-col justify-center items-center gap-10 py-20">
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
+            <header class="mb-5 text-gray-200">
+                <h1 class="text-2xl font-bold">User Information</h1>
+            </header>
+            <div class="flex justify-center items-center gap-2 mb-2">
+                <div class="group w-full md:w-1/3">
+                    <label for="first_name" class="text-xs text-gray-400 font-bold">First name:</label>
+                    <input 
+                        type="text" 
+                        name="first_name" 
+                        id="first_name" 
+                        class="w-full p-2 text-sm rounded" 
+                        v-model="this.first_name"
+                    />
+                    <p class="block h-4 text-xs text-red-400">{{ this.errors.first_name }}</p>
+                </div>
+                <div class="group w-full md:w-1/3">
+                    <label for="middle_name" class="text-xs text-gray-400 font-bold">Middle name:</label>
+                    <input 
+                        type="text" 
+                        name="middle_name" 
+                        id="middle_name" 
+                        class="w-full p-2 text-sm rounded" 
+                        v-model="this.middle_name"
+                    />
+                    <p class="block h-4 text-xs text-red-400">{{ this.errors.middle_name }}</p>
+                </div>
+                <div class="group w-full md:w-1/3">
+                    <label for="last_name" class="text-xs text-gray-400 font-bold">Last name:</label>
+                    <input 
+                        type="text" 
+                        name="last_name" 
+                        id="last_name" 
+                        class="w-full p-2 text-sm rounded" 
+                        v-model="this.last_name"
+                    />
+                    <p class="block h-4 text-xs text-red-400">{{ this.errors.last_name }}</p>
+                </div>
+                <div class="group w-full md:w-1/6">
+                    <label for="extension" class="text-xs text-gray-400 font-bold">Name extension:</label>
+                    <input 
+                        type="text" 
+                        name="extension" 
+                        id="extension" 
+                        class="w-full p-2 text-sm rounded" 
+                        v-model="this.extension"
+                    />
+                    <p class="block h-4"></p>
+                </div>
+            </div>
+            <button @click.prevent="validateUser" class="w-1/6 text-sm text-gray-200 font-bold rounded p-2 bg-blue-600 hover:bg-blue-900">save</button>
+        </section>
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
             <header class="mb-5 text-gray-200">
                 <h1 class="text-2xl font-bold">Account Settings</h1>
             </header>
-            <div class="space-y-2">
-                <div class="group">
+            <div class="flex justify-center items-center gap-2 mb-2">
+                <div class="group w-full md:w-1/2">
                     <label for="email" class="text-xs text-gray-400 font-bold">Email:</label>
                     <input 
                         type="text" 
@@ -14,87 +66,56 @@
                         class="w-full p-2 text-sm rounded" 
                         v-model="this.email"
                     />
+                    <p class="block h-4 text-xs text-red-400">{{ this.errors.email }}</p>
                 </div>
-                <div class="group">
+                <div class="group w-full md:w-1/2">
                     <label for="password" class="text-xs text-gray-400 font-bold">Password:</label>
                     <input 
                         type="password" 
                         name="password" 
                         id="password" 
                         class="w-full p-2 text-sm rounded" 
-                        
+                        v-model="this.old_password"
                     />
-                </div>
-                <button class="text-[8px] text-slate-700 font-bold rounded p-1 bg-cyan-400 hover:bg-cyan-200">change password</button>
-                <div class="group">
-                    <label for="new_password" class="text-xs text-gray-400 font-bold">New Password:</label>
-                    <input 
-                        type="password" 
-                        name="new_password" 
-                        id="new_password" 
-                        class="w-full p-2 text-sm rounded" 
-                    />
-                </div>
-                <div class="group">
-                    <label for="new_password" class="text-xs text-gray-400 font-bold">Confirm Password:</label>
-                    <input 
-                        type="password" 
-                        name="new_password" 
-                        id="new_password" 
-                        class="w-full p-2 text-sm rounded" 
-                    />
+                    <p class="block h-4 text-xs text-red-400">{{ this.errors.old_password }}</p>
                 </div>
             </div>
-        </section>
-        <section class="w-96 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
-                <h1 class="text-2xl font-bold">User Information</h1>
-            </header>
-            <div class="space-y-2">
-                <div class="group">
-                    <label for="first_name" class="text-xs text-gray-400 font-bold">First name:</label>
-                    <input 
-                        type="text" 
-                        name="first_name" 
-                        id="first_name" 
-                        class="w-full p-2 text-sm rounded" 
-                    />
+            <div class="flex flex-col">
+                <button @click="changePassword" class="mb-2 w-1/6 text-xs text-white p-1 rounded bg-gray-600 hover:bg-gray-700">change password</button>
+                <div v-if="password_change" class="flex justify-center items-center gap-2 mb-2">
+                    <div class="group w-full md:w-1/2">
+                        <label for="new_password" class="text-xs text-gray-400 font-bold">New Password:</label>
+                        <input 
+                            type="password" 
+                            name="new_password" 
+                            id="new_password" 
+                            class="w-full p-2 text-sm rounded" 
+                            v-model="this.password"
+                        />
+                        <p class="block h-4 text-xs text-red-400">{{ this.errors.password }}</p>
+                    </div>
+                    <div class="group w-full md:w-1/2">
+                        <label for="password_confirmation" class="text-xs text-gray-400 font-bold">Confirm Password:</label>
+                        <input 
+                            type="password" 
+                            name="password_confirmation" 
+                            id="password_confirmation" 
+                            class="w-full p-2 text-sm rounded" 
+                            v-model="this.password_confirmation"
+                        />
+                        <p class="block h-4 text-xs text-red-400">{{ this.errors.password_confirmation }}</p>
+                    </div>
                 </div>
-                <div class="group">
-                    <label for="middle_name" class="text-xs text-gray-400 font-bold">Middle name:</label>
-                    <input 
-                        type="text" 
-                        name="middle_name" 
-                        id="middle_name" 
-                        class="w-full p-2 text-sm rounded" 
-                    />
-                </div>
-                <div class="group">
-                    <label for="last_name" class="text-xs text-gray-400 font-bold">Last name:</label>
-                    <input 
-                        type="text" 
-                        name="last_name" 
-                        id="last_name" 
-                        class="w-full p-2 text-sm rounded" 
-                    />
-                </div>
-                <div class="group">
-                    <label for="extension" class="text-xs text-gray-400 font-bold">Name extension:</label>
-                    <input 
-                        type="text" 
-                        name="extension" 
-                        id="extension" 
-                        class="w-full p-2 text-sm rounded" 
-                    />
-                </div>
-                <button class="text-sm text-gray-200 font-bold rounded p-2 bg-blue-600 hover:bg-blue-900">save changes</button>
+                <button @click.prevent="validateAccount" class="w-1/6 text-sm text-gray-200 font-bold rounded p-2 bg-blue-600 hover:bg-blue-900">save</button>
             </div>
         </section>
     </div>
 </template>
 
 <script>
-    import { useAuthStore } from '../stores/auth.js'
+    import axios from 'axios';
+import { useAuthStore } from '../stores/auth.js'
+import Swal from 'sweetalert2';
     export default {
         data() {
             return {
@@ -103,6 +124,11 @@
                 last_name: '',
                 extension: '',
                 email: '',
+                old_password: '',
+                password: '',
+                password_confirmation: '',
+                password_change: false,
+                errors: {},
             }
         },
         methods: {
@@ -115,9 +141,114 @@
                 this.extension = user.extension
                 this.email = user.email
             },
+            changePassword() {
+                this.password_change = !this.password_change
+            },
+            updateAccount() {
+                const store = useAuthStore()
+                axios.post('/user/update/account', {
+                    user_id: store.user.id,
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation: this.password_confirmation
+                })
+                .then(response => {
+                    store.getUser(response.data?.user)
+                    this.email = response.data?.user?.email
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Account Settings successfully updated',
+                        icon: 'success'
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response?.data?.message,
+                        icon: 'error'
+                    })
+                })
+            },
+            updateUser() {
+                const store = useAuthStore()
+                axios.post('/user/update/user', {
+                    id: store.user.id,
+                    first_name: this.first_name,
+                    middle_name: this.middle_name,
+                    last_name: this.last_name,
+                    extension: this.extension,
+                })
+                .then(response => {
+                    const user = response.data?.user
+                    store.getUser(user)
+                    this.first_name = user.first_name
+                    this.middle_name = user.middle_name
+                    this.last_name = user.last_name
+                    this.extension = user.extension
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'User Information successfully updated',
+                        icon: 'success',
+                    })
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response?.data?.message
+                    })
+                })
+            },
+            validateAccount() {
+                this.errors = {}
+
+                if (!this.email) {
+                    this.errors.email = 'Email is required'
+                }
+
+                if (this.password_change && !this.old_password) {
+                    this.errors.old_password = 'Old password is required'
+                }
+
+                if (this.password_change && !this.password) {
+                    this.errors.password = 'New password is required'
+                }
+
+                if (this.password_change && !this.password_confirmation) {
+                    this.errors.password_confirmation = 'Password confirmation is required'
+                }
+
+                if (this.password_change && this.password != this.password_confirmation) {
+                    this.errors.password = 'Password mismatch'
+                    this.errors.password_confirmation = 'Password mismatch'
+                }
+
+                if (Object.keys(this.errors).length === 0) {
+                    this.updateAccount()
+                } 
+            },
+            validateUser() {
+                this.errors = {}
+
+                if (!this.first_name) {
+                    this.errors.first_name = 'First name is required'
+                }
+                
+                if (!this.middle_name) {
+                    this.errors.middle_name = 'Middle name is required'
+                }
+                
+                if (!this.last_name) {
+                    this.errors.last_name = 'Last name is required'
+                }
+
+                if (Object.keys(this.errors).length === 0) {
+                    this.updateUser()
+                }
+            },
         },
         mounted() {
-
+            this.getUser()
         },
     }
 </script>

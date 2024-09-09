@@ -61,8 +61,41 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function updateAccount(Request $request)
     {
-        
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'email' => 'required|email:rfc,dns',
+            'password' => 'nullable',
+        ]);
+
+        $user = User::find($validated['user_id']);
+        $user->email = $validated['email'];
+        if ($validated['password']) {
+            $user->password = Hash::make($validated['password']);
+        }
+        $user->save();
+
+        return response()->json([
+            'user' => $user
+        ]);
+    }
+
+    public function updateUser(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|exists:users,id',
+            'first_name' => 'required',
+            'middle_name' => 'required',
+            'last_name' => 'required',
+            'extension' => 'nullable',
+        ]);
+
+        $user = User::find($validated['id']);
+        $user->update($validated);
+
+        return response()->json([
+            'user' => $user
+        ]);
     }
 }

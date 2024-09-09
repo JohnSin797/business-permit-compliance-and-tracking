@@ -15,7 +15,14 @@ class BusinessController extends Controller
         ]);
 
         $user = User::find($request->user_id);
-        $business = $user->business;
+        $business = Business::with([
+            'permitRequest' => function ($permit) {
+                $permit->orderByDesc('created_at');
+            }
+        ])
+            ->where('user_id', $user->id)
+            ->get();
+        // $business = $user->business;
         // $business = Business::with('')
 
         return response()->json([
@@ -39,7 +46,7 @@ class BusinessController extends Controller
 
         if ($business) {
             return response()->json([
-                'message' => 'Business created'
+                'message' => 'Business created successfully'
             ]);
         }
 

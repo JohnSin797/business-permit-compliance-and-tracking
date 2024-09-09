@@ -41,6 +41,7 @@
                             required
                         >
                             <option value="">select</option>
+                            <option v-for="(brgy, index) in this.barangays" :key="index" :value="brgy">{{ brgy }}</option>
                         </select>
                     </div>
                     <div class="group w-full md:w-1/2">
@@ -103,6 +104,7 @@
 <script>
     import axios from 'axios';
     import { useAuthStore } from '../../stores/auth';
+import Swal from 'sweetalert2';
 
     export default {
         data() {
@@ -113,6 +115,7 @@
                 type_of_organization: '',
                 dti_registration_number: '',
                 tin: '',
+                barangays: [],
             }
         },
         methods: {
@@ -134,11 +137,31 @@
                     this.type_of_organization = ''
                     this.dti_registration_number = ''
                     this.tin = ''
+                    Swal.fire({
+                        title: 'Success',
+                        text: response.data?.message
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response?.data?.message
+                    })
+                })
+            },
+            getBarangays() {
+                axios.post('/barangay-list')
+                .then(response => {
+                    this.barangays = response.data?.barangay
                 })
                 .catch(error => {
                     console.log(error)
                 })
-            }
-        }
+            },
+        },
+        mounted() {
+            this.getBarangays()
+        },
     }
 </script>

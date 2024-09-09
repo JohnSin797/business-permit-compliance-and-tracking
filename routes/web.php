@@ -23,6 +23,8 @@ Route::get('/verify-email', function() {
 Route::prefix('user')->controller(UserController::class)->group(function() {
     Route::post('/verify-email', 'verify');
     Route::post('/resend', 'resend');
+    Route::post('/update/account', 'updateAccount');
+    Route::post('/update/user', 'updateUser');
 });
 
 Route::prefix('business')->controller(BusinessController::class)->group(function() {
@@ -35,7 +37,7 @@ Route::prefix('request')->controller(BusinessPermitRequestController::class)->gr
     Route::post('/store', 'store');
 });
 
-Route::get('/barangay-list', function() {
+Route::post('/barangay-list', function() {
     $barangay = Constant::barangayList();
     return response()->json([
         'barangay' => $barangay,
