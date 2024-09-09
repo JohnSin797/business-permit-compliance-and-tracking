@@ -45,6 +45,7 @@
     import axios from 'axios';
     import LogoLGU from '../../components/LogoLGU.vue';
     import { useAuthStore } from '../../stores/auth';
+    import Swal from 'sweetalert2';
 
     export default {
         data() {
@@ -70,6 +71,11 @@
                 })
                 .catch(error => {
                     console.log(error)
+                    Swal.fire({
+                        title: 'Error',
+                        text: error?.response?.data?.error,
+                        icon: 'error'
+                    })
                 })
             }
         }

@@ -26,7 +26,7 @@ class AuthController extends Controller
             ]);
         }
 
-        if (User::where('email', $credentials->email)->exists()) {
+        if (User::where('email', $credentials['email'])->exists()) {
             return response()->json([
                 'error' => 'Password did not match'
             ], 401);

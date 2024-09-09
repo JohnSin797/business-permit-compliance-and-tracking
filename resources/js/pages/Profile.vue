@@ -12,6 +12,7 @@
                         name="email" 
                         id="email" 
                         class="w-full p-2 text-sm rounded" 
+                        v-model="this.email"
                     />
                 </div>
                 <div class="group">
@@ -21,7 +22,7 @@
                         name="password" 
                         id="password" 
                         class="w-full p-2 text-sm rounded" 
-                        readonly
+                        
                     />
                 </div>
                 <button class="text-[8px] text-slate-700 font-bold rounded p-1 bg-cyan-400 hover:bg-cyan-200">change password</button>
@@ -91,3 +92,32 @@
         </section>
     </div>
 </template>
+
+<script>
+    import { useAuthStore } from '../stores/auth.js'
+    export default {
+        data() {
+            return {
+                first_name: '',
+                middle_name: '',
+                last_name: '',
+                extension: '',
+                email: '',
+            }
+        },
+        methods: {
+            getUser() {
+                const store = useAuthStore()
+                const user = store.user
+                this.first_name = user.first_name
+                this.middle_name = user.middle_name
+                this.last_name = user.last_name
+                this.extension = user.extension
+                this.email = user.email
+            },
+        },
+        mounted() {
+
+        },
+    }
+</script>
