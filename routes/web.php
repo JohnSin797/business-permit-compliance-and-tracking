@@ -30,11 +30,13 @@ Route::prefix('user')->controller(UserController::class)->group(function() {
 Route::prefix('business')->controller(BusinessController::class)->group(function() {
     Route::post('/', 'index');
     Route::post('/store', 'store');
+    Route::post('/admin', 'admin');
 });
 
 Route::prefix('request')->controller(BusinessPermitRequestController::class)->group(function() {
     Route::post('/', 'index');
     Route::post('/store', 'store');
+    Route::post('/admin', 'admin');
 });
 
 Route::post('/barangay-list', function() {

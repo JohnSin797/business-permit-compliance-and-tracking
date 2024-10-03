@@ -19,12 +19,31 @@ class BusinessPermitRequestController extends Controller
                 $business->where('user_id', $request->user_id);
             }
         ])
+        ->whereHas('business', function($b) use($request) {
+            $b->where('user_id', $request->user_id);
+        })
         ->orderByRaw("FIELD(status, 'incomplete', 'pending', 'verified')")
         ->orderByDesc('created_at')
         ->get();
 
         return response()->json([
             'request' => $business_request,
+        ]);
+    }
+
+    public function admin(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $business_request = BusinessPermitRequest::with('business')
+        ->orderByRaw("FIELD(status, 'incomplete', 'pending', 'verified')")
+        ->orderByDesc('created_at')
+        ->get();
+
+        return response()->json([
+            'request' => $business_request
         ]);
     }
 

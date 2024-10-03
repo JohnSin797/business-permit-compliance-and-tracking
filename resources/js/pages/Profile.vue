@@ -13,6 +13,7 @@
                         id="first_name" 
                         class="w-full p-2 text-sm rounded" 
                         v-model="this.first_name"
+                        v-on:keypress="isLetter"
                     />
                     <p class="block h-4 text-xs text-red-400">{{ this.errors.first_name }}</p>
                 </div>
@@ -24,6 +25,7 @@
                         id="middle_name" 
                         class="w-full p-2 text-sm rounded" 
                         v-model="this.middle_name"
+                        v-on:keypress="isLetter"
                     />
                     <p class="block h-4 text-xs text-red-400">{{ this.errors.middle_name }}</p>
                 </div>
@@ -35,6 +37,7 @@
                         id="last_name" 
                         class="w-full p-2 text-sm rounded" 
                         v-model="this.last_name"
+                        v-on:keypress="isLetter"
                     />
                     <p class="block h-4 text-xs text-red-400">{{ this.errors.last_name }}</p>
                 </div>
@@ -46,6 +49,7 @@
                         id="extension" 
                         class="w-full p-2 text-sm rounded" 
                         v-model="this.extension"
+                        v-on:keypress="isLetter"
                     />
                     <p class="block h-4"></p>
                 </div>
@@ -132,6 +136,11 @@ import Swal from 'sweetalert2';
             }
         },
         methods: {
+            isLetter(e) {
+  let char = String.fromCharCode(e.keyCode); // Get the character
+  if(/^[A-Za-z]+$/.test(char)) return true; // Match with regex 
+  else e.preventDefault(); // If not match, don't add to input text
+},
             getUser() {
                 const store = useAuthStore()
                 const user = store.user

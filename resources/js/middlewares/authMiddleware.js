@@ -7,7 +7,16 @@ export function authMiddleware(to, from, next) {
         if (!isAuthenticated) {
             next('/sign-in');
         } else {
-            next();
+            if (to.meta.verifiedOnly) {
+                if (!store?.user?.email_verified_at) {
+                    next('/verification');
+                }
+                else {
+                    next();
+                }
+            } else {
+                next();
+            }
         }
     } else if (to.meta.requiresGuest) {
         if (isAuthenticated) {

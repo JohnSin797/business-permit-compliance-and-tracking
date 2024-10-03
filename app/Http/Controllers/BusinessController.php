@@ -30,6 +30,29 @@ class BusinessController extends Controller
         ]);
     }
 
+    public function admin(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $admin = User::find($request->user_id);
+        if ($admin->role == 'admin') {
+            $business = Business::with([
+                'permitRequest' => function($permit) use($request) {
+                    $permit->orderByDesc('created_at');
+                }
+            ])
+            ->get();
+            return response()->json([
+                'business' => $business
+            ]);
+        }
+        return response()->json([
+            'message' => 'unauthorized'
+        ], 400);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
