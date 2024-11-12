@@ -5,7 +5,7 @@
                 <router-link to="/business" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
                     <v-icon name="fa-arrow-left" />
                 </router-link>
-                <h1 class="text-2xl font-bold">Edit Business</h1>
+                <h1 class="text-2xl font-bold">View Business</h1>
             </header>
             <form @submit.prevent="handleSubmit">
                 <div class="mb-2 w-full flex flex-col md:flex-row gap-2">
@@ -18,7 +18,7 @@
                             class="w-full p-2 rounded text-sm" 
                             placeholder="Business name"
                             v-model="this.business_name"
-                            required
+                            readonly
                         />
                     </div>
                     <div class="group w-full md:w-1/2">
@@ -29,23 +29,21 @@
                             id="date_established" 
                             class="w-full p-2 rounded text-sm" 
                             v-model="this.date_of_establishment"
-                            required
+                            readonly
                         />
                     </div>
                 </div>
                 <div class="mb-2 w-full flex flex-col md:flex-row gap-2">
                     <div class="group w-full md:w-1/2">
                         <label for="business_address" class="text-gray-400 text-xs font-bold">Business Address</label>
-                        <select
+                        <input 
+                            type="text" 
                             name="business_address" 
                             id="business_address" 
                             class="w-full p-2 rounded text-sm" 
                             v-model="this.business_address"
-                            required
-                        >
-                            <option value="">select</option>
-                            <option v-for="(brgy, index) in this.barangays" :key="index" :value="brgy">{{ brgy }}</option>
-                        </select>
+                            readonly
+                        />
                     </div>
                     <div class="group w-full md:w-1/2">
                         <label for="type_of_organization" class="text-gray-400 text-xs font-bold">Type of Organization</label>
@@ -54,7 +52,7 @@
                             id="type_of_organization" 
                             class="w-full p-2 rounded text-sm"
                             v-model="this.type_of_organization"
-                            required
+                            disabled
                         >
                             <option value="">select</option>
                             <option value="sole proprietorship">Sole Proprietorship</option>
@@ -79,6 +77,7 @@
                             class="w-full p-2 rounded text-sm" 
                             placeholder="DTI Registration Number"
                             v-model="this.dti_registration_number"
+                            readonly
                         />
                     </div>
                     <div class="group w-full md:w-1/2">
@@ -90,15 +89,10 @@
                             class="w-full p-2 rounded text-sm" 
                             placeholder="TIN"
                             v-model="this.tin"
+                            readonly
                         />
                     </div>
                 </div>
-                    <button 
-                        type="submit" 
-                        class="rounded p-2 text-sm w-full md:w-1/5 bg-blue-400 hover:bg-blue-600 text-gray-200 hover:text-white font-bold"
-                    >
-                        Create
-                    </button>
             </form>
         </section>
     </div>
@@ -106,7 +100,6 @@
 
 <script>
 import axios from 'axios';
-import Swal from 'sweetalert2';
 
     export default {
         data() {
@@ -121,32 +114,6 @@ import Swal from 'sweetalert2';
             }
         },
         methods: {
-            async handleSubmit() {
-                const id = this.$route.params.business_id
-                await axios.put(`/api/business/edit/${id}`, {
-                    business_name: this.business_name,
-                    business_address: this.business_address,
-                    date_established: this.date_of_establishment,
-                    type_of_organization: this.type_of_organization,
-                    dti_registration_number: this.dti_registration_number,
-                    tin: this.tin,
-                })
-                .then(response => {
-                    console.log(response)
-                    Swal.fire({
-                        title: 'Edit Business',
-                        text: 'Business has been successfully updated',
-                        icon: 'success',
-                    })
-                })
-                .catch(error => {
-                    console.log(error)
-                    Swal.fire({
-                        title: 'Update Error',
-                        text: error?.response?.data?.message
-                    })
-                })
-            },
             async getData() {
                 const id = this.$route.params.business_id
                 await axios.get(`/api/business/show/${id}`)
@@ -163,18 +130,8 @@ import Swal from 'sweetalert2';
                     console.log(error)
                 })
             },
-            async getBarangays() {
-                await axios.post('/barangay-list')
-                .then(response => {
-                    this.barangays = response.data?.barangay
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-            },
         },
         mounted() {
-            this.getBarangays()
             this.getData()
         },
     }

@@ -1,7 +1,10 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
         <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+            <header class="mb-5 text-gray-200 flex justify-start items-center gap-2">
+                <router-link to="/business" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
+                    <v-icon name="fa-arrow-left" />
+                </router-link>
                 <h1 class="text-2xl font-bold">Create Business</h1>
             </header>
             <form @submit.prevent="handleSubmit">

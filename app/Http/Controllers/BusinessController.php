@@ -53,6 +53,14 @@ class BusinessController extends Controller
         ], 400);
     }
 
+    public function show(Business $business)
+    {
+        return response()->json([
+            'message' => 'OK',
+            'business' => $business
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -76,8 +84,35 @@ class BusinessController extends Controller
         return response()->json(['message' => 'Failed to create business'], 500);
     }
 
-    public function update(Request $request)
+    public function update(Business $business, Request $request)
     {
+        $validated = $request->validate([
+            'business_name' => 'required',
+            'business_address' => 'required',
+            'date_established' => 'required',
+            'type_of_organization' => 'required',
+            'dti_registration_number' => 'nullable',
+            'tin' => 'nullable',
+        ]);
+        $result = $business->update($validated);
 
+        if (!$result) {
+            return response()->json([
+                'message' => 'Failed to update business'
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'OK',
+            'business' => $business,
+        ], 200);
+    }
+
+    public function delete(Business $business)
+    {
+        return response()->json([
+            'message' => 'OK',
+            'business' => $business
+        ], 200);
     }
 }

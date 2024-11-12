@@ -1,19 +1,24 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
         <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
-                <h1 class="text-2xl font-bold">Requirements</h1>
-                <p class="text-sm">Take a picture of your completed requirements and upload them</p>
+            <header class="flex justify-start items-start gap-2">
+                <router-link to="/request" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
+                    <v-icon name="fa-arrow-left" />
+                </router-link>
+                <header class="mb-5 text-gray-200">
+                    <h1 class="text-2xl font-bold">Requirements</h1>
+                    <p class="text-sm">Take a picture of your completed requirements and upload them</p>
+                </header>
             </header>
             <form enctype="multipart/form-data">
                 <div class="w-full space-y-2 text-gray-400">
                     <div class="flex justify-between items-center border-b py-2">
                         <p class="font-bold">Barangay Clearance</p>
-                        <div v-if="this.requirements.barangay_clearance" class="flex justify-center items-center gap-2">
+                        <div v-if="this.requirements?.barangay_clearance" class="flex justify-center items-center gap-2">
                             <p class="block rounded-full bg-green-400 w-8 h-8 flex justify-center items-center">
                                 <v-icon name="fa-regular-check-circle" class="text-gray-200" scale="1.9" />
                             </p>
-                            <label for="barangay_clearance"class="block rounded-full bg-indigo-400 hover:bg-indigo-600 cursor-pointer w-8 h-8 flex justify-center items-center">
+                            <label for="barangay_clearance" class="block rounded-full bg-indigo-400 hover:bg-indigo-600 cursor-pointer w-8 h-8 flex justify-center items-center">
                                 <v-icon name="fa-pencil-alt" class="text-gray-200" />
                             </label>
                         </div>
@@ -26,14 +31,13 @@
                             id="barangay_clearance" 
                             class="hidden"
                             @change="handleUpload" 
-                            :disabled="this.requirements.barangay_clearance != null"
                         />
                     </div>
                 </div>
                 <div class="w-full space-y-2 text-gray-400">
                     <div class="flex justify-between items-center border-b py-2">
                         <p class="font-bold">Cedula</p>
-                        <div v-if="this.requirements.cedula" class="flex justify-center items-center gap-2">
+                        <div v-if="this.requirements?.cedula" class="flex justify-center items-center gap-2">
                             <p class="block rounded-full bg-green-400 w-8 h-8 flex justify-center items-center">
                                 <v-icon name="fa-regular-check-circle" class="text-gray-200" scale="1.9" />
                             </p>
@@ -50,14 +54,13 @@
                             id="cedula" 
                             class="hidden"
                             @change="handleUpload" 
-                            :disabled="this.requirements.cedula != null"
                         />
                     </div>
                 </div>
                 <div class="w-full space-y-2 text-gray-400">
                     <div class="flex justify-between items-center border-b py-2">
                         <p class="font-bold">Business Registration</p>
-                        <div v-if="this.requirements.business_registration" class="flex justify-center items-center gap-2">
+                        <div v-if="this.requirements?.business_registration" class="flex justify-center items-center gap-2">
                             <p class="block rounded-full bg-green-400 w-8 h-8 flex justify-center items-center">
                                 <v-icon name="fa-regular-check-circle" class="text-gray-200" scale="1.9" />
                             </p>
@@ -74,14 +77,13 @@
                             id="business_registration" 
                             class="hidden"
                             @change="handleUpload" 
-                            :disabled="this.requirements.business_registration != null"
                         />
                     </div>
                 </div>
                 <div class="w-full space-y-2 text-gray-400">
                     <div class="flex justify-between items-center border-b py-2">
                         <p class="font-bold">BIR Certificate of Registration</p>
-                        <div v-if="this.requirements.bir_certificate_of_registration" class="flex justify-center items-center gap-2">
+                        <div v-if="this.requirements?.bir_certificate_of_registration" class="flex justify-center items-center gap-2">
                             <p class="block rounded-full bg-green-400 w-8 h-8 flex justify-center items-center">
                                 <v-icon name="fa-regular-check-circle" class="text-gray-200" scale="1.9" />
                             </p>
@@ -98,14 +100,13 @@
                             id="bir_certificate_of_registration" 
                             class="hidden"
                             @change="handleUpload" 
-                            :disabled="this.requirements.bir_certificate_of_registration != null"
                         />
                     </div>
                 </div>
                 <div class="w-full space-y-2 text-gray-400">
                     <div class="flex justify-between items-center border-b py-2">
                         <p class="font-bold">Notarized Contract of Lease (if user is lessee / sharing office)</p>
-                        <div v-if="this.requirements.notarized_contract_of_lease" class="flex justify-center items-center gap-2">
+                        <div v-if="this.requirements?.notarized_contract_of_lease" class="flex justify-center items-center gap-2">
                             <p class="block rounded-full bg-green-400 w-8 h-8 flex justify-center items-center">
                                 <v-icon name="fa-regular-check-circle" class="text-gray-200" scale="1.9" />
                             </p>
@@ -122,14 +123,13 @@
                             id="notarized_contract_of_lease" 
                             class="hidden"
                             @change="handleUpload" 
-                            :disabled="this.requirements.notarized_contract_of_lease != null"
                         />
                     </div>
                 </div>
                 <div class="w-full space-y-2 text-gray-400">
                     <div class="flex justify-between items-center border-b py-2">
                         <p class="font-bold">ECC or CNC (if applicable DENR)</p>
-                        <div v-if="this.requirements.ecc_cnc_denr" class="flex justify-center items-center gap-2">
+                        <div v-if="this.requirements?.ecc_cnc_denr" class="flex justify-center items-center gap-2">
                             <p class="block rounded-full bg-green-400 w-8 h-8 flex justify-center items-center">
                                 <v-icon name="fa-regular-check-circle" class="text-gray-200" scale="1.9" />
                             </p>
@@ -146,7 +146,6 @@
                             id="ecc_cnc_denr" 
                             class="hidden"
                             @change="handleUpload" 
-                            :disabled="this.requirements.ecc_cnc_denr != null"
                         />
                     </div>
                 </div>
@@ -157,6 +156,7 @@
 
 <script>
     import axios from 'axios'
+import Swal from 'sweetalert2';
 
     export default {
         data() {
@@ -175,6 +175,7 @@
         },
         methods: {
             handleUpload(event) {
+                console.log('asd')
                 const file = event.target.files[0]
                 const column = event.target.name
                 this.uploadFile(column, file)
@@ -187,10 +188,16 @@
                 formData.append('id', id)
                 axios.post('/requirements', formData)
                 .then(response => {
-                    this.requirements = response.data?.requirements
+                    console.log(response)
+                    this.requirements = response.data?.requirement
                 })
                 .catch(error => {
                     console.log(error)
+                    Swal.fire({
+                        title: 'Upload Error',
+                        text: error.response?.data?.message,
+                        icon: 'error'
+                    })
                 })
             },
             getRequirements() {

@@ -31,16 +31,42 @@
                                     >
                                         View
                                     </router-link>
-                                    <button :disabled="request.status!='pending'" v-if="request.status!='confirmed'" class="rounded p-2 text-xs font-bold bg-indigo-400 hover:bg-indigo-600 text-gray-200 hover:text-white">
+                                    <button 
+                                        @click="confirmConfirm(request.id)"
+                                        :disabled="request.status!='pending'" 
+                                        v-if="request.status!='confirmed'" 
+                                        :class="`rounded p-2 text-xs font-bold text-gray-200 
+                                        ${request.status != 'pending' ? 'bg-gray-400' : 'bg-indigo-400 hover:bg-indigo-600 hover:text-white'}`"
+                                    >
                                         Confirm
                                     </button>
                                 </div>
                                 <div v-else class="flex flex-wrap gap-2 justify-center items-center">
-                                    <router-link :to="`/request/requirements/${request.id}`" class="rounded p-2 text-xs font-bold bg-green-500 hover:bg-green-700 text-gray-200 hover:text-white">
+                                    <router-link 
+                                        v-if="this.userData.role=='user'&&(request.status=='incomplete'||request.status=='pending')" 
+                                        :to="`/request/requirements/${request.id}`" 
+                                        class="rounded p-2 text-xs font-bold bg-cyan-400 hover:bg-cyan-600 text-gray-200 hover:text-white"
+                                    >
+                                        Uploads
+                                    </router-link>
+                                    <router-link 
+                                        :to="`/request/view/${request.id}`" 
+                                        class="rounded p-2 text-xs font-bold bg-green-400 hover:bg-green-600 text-gray-200 hover:text-white"
+                                    >
                                         View
                                     </router-link>
-                                    <!-- <button class="rounded p-2 text-xs font-bold bg-blue-500 hover:bg-blue-700 text-gray-200 hover:text-white">Edit</button> -->
-                                    <button class="rounded p-2 text-xs font-bold bg-red-400 hover:bg-red-600 text-gray-200 hover:text-white">Delete</button>
+                                    <button 
+                                        v-if="request.status=='incomplete'||request.status=='pending'" 
+                                        class="rounded p-2 text-xs font-bold bg-blue-500 hover:bg-blue-700 text-gray-200 hover:text-white"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button 
+                                        v-if="request.status=='incomplete'||request.status=='pending'" 
+                                        class="rounded p-2 text-xs font-bold bg-red-400 hover:bg-red-600 text-gray-200 hover:text-white"
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -54,6 +80,7 @@
 <script>
     import axios from 'axios';
     import { useAuthStore } from '../../stores/auth';
+import Swal from 'sweetalert2';
 
     export default {
         data() {
@@ -63,6 +90,38 @@
             }
         },
         methods: {
+            confirmConfirm(id) {
+                Swal.fire({
+                    title: 'Request Confirmation',
+                    text: 'Are you sure you want to confirm this request?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    cancelButtonColor: 'red',
+                    confirmButtonColor: 'indigo',
+                })
+                .then(response => {
+                    if (response.isConfirmed) {
+                        this.confirmRequest(id)
+                    }
+                })
+            },
+            async confirmRequest(id) {
+                await axios.patch(`/api/request/update/${id}`)
+                .then(response => {
+                    console.log(response)
+                    const req = response.data?.request
+                    this.requests = req
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire({
+                        title: 'Confirmation Error',
+                        text: error?.response?.data?.message,
+                        icon: 'error'
+                    })
+                })
+            },
             getRequests() {
                 const store = useAuthStore()
                 axios.post('/request', { user_id: store.user.id })

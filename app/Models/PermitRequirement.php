@@ -13,11 +13,15 @@ class PermitRequirement extends Model
         'request_id',
         'application_form',
         'certificate_of_registration',
-        'barangay_business_clearance',
+        'barangay_clearance',
         'cedula',
-        'contract_of_lease',
         'locational_clearance',
         'sanitary_permit',
         'fire_safety_inspection_permit',
+        'tin',
+        'business_registration',
+        'bir_certificate_of_registration',
+        'notarized_contract_of_lease',
+        'ecc_cnc_denr',
     ];
 }

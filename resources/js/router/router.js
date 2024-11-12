@@ -6,6 +6,8 @@ import SignUp from "../pages/auth/SignUp.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import Business from "../pages/businesses/Business.vue";
 import BusinessCreate from "../pages/businesses/Create.vue";
+import BusinessEdit from "../pages/businesses/Edit.vue";
+import BusinessView from "../pages/businesses/View.vue";
 import Request from "../pages/requests/Request.vue";
 import RequestCreate from "../pages/requests/Create.vue";
 import RequestView from "../pages/requests/View.vue";
@@ -50,6 +52,18 @@ const routes = [
         meta: { Layout: true, requiresAuth: true, verifiedOnly: true }
     },
     {
+        name: 'business-edit',
+        path: '/business/edit/:business_id',
+        component: BusinessEdit,
+        meta: { Layout: true, requiresAuth: true, verifiedOnly: true }
+    },
+    {
+        name: 'business-view',
+        path: '/business/view/:business_id',
+        component: BusinessView,
+        meta: { Layout: true, requiresAuth: true, verifiedOnly: true }
+    },
+    {
         name: 'request',
         path: '/request',
         component: Request,
@@ -63,7 +77,7 @@ const routes = [
     },
     {
         name: 'request-view',
-        path: '/request/view/:business_id?',
+        path: '/request/view/:request_id?',
         component: RequestView,
         meta: { Layout: true, requiresAdmin: true, verifiedOnly: true }
     },

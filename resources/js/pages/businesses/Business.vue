@@ -34,9 +34,9 @@
                                     >
                                         Request
                                     </router-link>
-                                    <button class="rounded p-2 text-xs font-bold bg-green-500 hover:bg-green-700 text-gray-200 hover:text-white">View</button>
-                                    <button class="rounded p-2 text-xs font-bold bg-blue-500 hover:bg-blue-700 text-gray-200 hover:text-white">Edit</button>
-                                    <button class="rounded p-2 text-xs font-bold bg-red-400 hover:bg-red-600 text-gray-200 hover:text-white">Delete</button>
+                                    <router-link :to="`/business/view/${business.id}`" class="block rounded p-2 text-xs font-bold bg-green-500 hover:bg-green-700 text-gray-200 hover:text-white">View</router-link>
+                                    <router-link :to="`/business/edit/${business.id}`" class="block rounded p-2 text-xs font-bold bg-blue-500 hover:bg-blue-700 text-gray-200 hover:text-white">Edit</router-link>
+                                    <button @click="confirmDelete(business.id)" class="rounded p-2 text-xs font-bold bg-red-400 hover:bg-red-600 text-gray-200 hover:text-white">Delete</button>
                                 </div>
                              </td>
                         </tr>
@@ -50,6 +50,7 @@
 <script>
     import axios from 'axios';
     import { useAuthStore } from '../../stores/auth';
+import Swal from 'sweetalert2';
 
     export default {
         data() {
@@ -99,6 +100,33 @@
                 } else {
                     this.getBusiness(user.id)
                 }
+            },
+            async deleteBusiness(id) {
+                await axios.patch(`/api/business/delete/${id}`)
+                .then(response => {
+                    console.log(response)
+                    const b = response.data?.business
+                    this.businesses = b
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+            confirmDelete(id) {
+                Swal.fire({
+                    title: 'Confirm Delete',
+                    text: 'Are you sure you want to delete this?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    cancelButtonColor: 'red',
+                    confirmButtonColor: 'indigo',
+                })
+                .then(response => {
+                    if (response.isConfirmed) {
+                        this.deleteBusiness(id)
+                    }
+                })
             },
         },
         mounted() {
