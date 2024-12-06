@@ -1,11 +1,11 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="flex justify-start items-start gap-2">
                 <router-link to="/request" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
                     <v-icon name="fa-arrow-left" />
                 </router-link>
-                <header class="mb-5 text-gray-200">
+                <header class="mb-5 text-gray-900">
                     <h1 class="text-2xl font-bold">Requirements</h1>
                     <p class="text-sm">Take a picture of your completed requirements and upload them</p>
                 </header>

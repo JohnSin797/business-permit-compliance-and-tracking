@@ -1,7 +1,7 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
-        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-2xl font-bold">Create Business Permit Request</h1>
             </header>
             <form @submit.prevent="handleSubmit">

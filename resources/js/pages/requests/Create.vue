@@ -1,8 +1,8 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
-        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="mb-5 text-gray-200">
-                <h1 class="text-2xl font-bold">Create Business Permit Request</h1>
+                <h1 class="text-2xl text-slate-900 font-bold">Create Business Permit Request</h1>
             </header>
             <form @submit.prevent="handleSubmit">
                 <div class="w-full flex flex-col md:flex-row gap-2 mb-2">

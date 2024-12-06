@@ -1,8 +1,10 @@
 <template>
-    <div class="fixed w-full md:w-1/6 min-h-screen p-5 ">
+    <div class="fixed w-full md:w-1/6 min-h-screen p-5 bg-[#87e0e0]">
         <header class="mb-5 flex flex-col items-center gap-2">
-            <LogoLGU sizeClass="w-14 h-14" />
-            <h1 class="text-sm text-gray-400 text-center font-bold">Business Permit Compliance & Tracking</h1>
+            <div class="w-14 h-14 rounded-full overflow-hidden">
+                <LogoLGU sizeClass="w-14 h-14" />
+            </div>
+            <h1 class="text-sm text-gray-900 text-center font-bold">Business Permit Compliance & Tracking</h1>
         </header>
         <nav class="flex flex-col gap-2 font-bold text-slate-700">
             <router-link to="/" class="p-2 rounded" :class="{'bg-slate-600 text-white' : this.isLinkActive('/')}">

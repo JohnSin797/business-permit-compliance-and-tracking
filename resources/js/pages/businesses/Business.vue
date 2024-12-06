@@ -1,8 +1,8 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
-        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="mb-5 text-gray-200 flex items-center justify-between">
-                <h1 class="text-2xl font-bold">Businesses</h1>
+                <h1 class="text-2xl text-slate-900 font-bold">Businesses</h1>
                 <router-link v-if="userData?.role == 'user'" to="/business/create" class="text-sm hover:text-white bg-blue-400 hover:bg-blue-600 font-bold p-2 rounded">
                     <v-icon name="md-noteadd-round" />
                     Create new

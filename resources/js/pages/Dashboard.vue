@@ -1,22 +1,22 @@
 <template>
-    <div class="w-full h-96 md:h-[500px] mt-16 2xl:h-[560px] overflow-auto" ref="scrollContainer" @scroll="handleScroll">
+    <div class="w-full h-96 md:h-[500px] mt-16 2xl:h-[600px] overflow-auto px-3 md:px-20" ref="scrollContainer" @scroll="handleScroll">
         <!-- <VerificationForm v-if="isVerified" :handleSubmit="this.handleVerification" /> -->
         <RequestWindow />
         <div class="w-full flex flex-col justify-center items-center gap-10 p-2">
-            <section class="w-full max-w-[550px]" v-if="userData.role=='admin'">
+            <section class="w-full " v-if="userData.role=='admin'">
                 <header class="font-semibold">
-                    <h1 class="text-xl text-center text-gray-100">Post Announcements</h1>
+                    <h1 class="text-xl text-center text-gray-800">Post Announcements</h1>
                 </header>
                 <form @submit.prevent="postAnnouncement">
                     <div class="flex justify-center items-center gap-2">
-                        <input type="text" name="message" id="message" v-model="this.blog.message" class="w-full p-2 text-sm rounded-lg shadow-xl" />
+                        <input type="text" name="message" id="message" v-model="this.blog.message" class="w-full p-2 text-sm rounded-lg shadow-xl ring-2 ring-gray-400" />
                         <button type="submit" class="w-1/6 p-2 text-sm text-white rounded-lg bg-blue-400 hover:bg-blue-600 shadow-xl">
                             <v-icon name="fa-paper-plane" scale="1" />
                         </button>
                     </div>
                 </form>
             </section>
-            <article class="w-full max-w-[550px] p-10 rounded-lg shadow-xl bg-gray-400" v-for="(ann,index) in announcements" :key="index">
+            <article class="w-full p-10 rounded-lg shadow-xl bg-gray-400" v-for="(ann,index) in announcements" :key="index">
                 <header class="font-bold">{{ new Date(ann.created_at).toISOString().substring(0, 16).replace('T', ' ') }}</header>
                 <div class="p-2 w-full">
                     <div class="w-full border border-gray-400" v-if="ann.images"></div>

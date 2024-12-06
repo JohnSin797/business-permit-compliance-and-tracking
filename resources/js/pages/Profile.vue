@@ -1,7 +1,7 @@
 <template>
     <div class="w-full min-h-screen flex flex-col justify-center items-center gap-10 py-20">
-        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-2xl font-bold">User Information</h1>
             </header>
             <div class="mb-5 flex flex-col justify-center items-center w-60">
@@ -13,7 +13,7 @@
             </div>
             <div class="flex justify-center items-center gap-2 mb-2">
                 <div class="group w-full md:w-1/3">
-                    <label for="first_name" class="text-xs text-gray-400 font-bold">First name:</label>
+                    <label for="first_name" class="text-xs text-gray-900 font-bold">First name:</label>
                     <input 
                         type="text" 
                         name="first_name" 
@@ -25,7 +25,7 @@
                     <p class="block h-4 text-xs text-red-400">{{ this.errors.first_name }}</p>
                 </div>
                 <div class="group w-full md:w-1/3">
-                    <label for="middle_name" class="text-xs text-gray-400 font-bold">Middle name:</label>
+                    <label for="middle_name" class="text-xs text-gray-900 font-bold">Middle name:</label>
                     <input 
                         type="text" 
                         name="middle_name" 
@@ -37,7 +37,7 @@
                     <p class="block h-4 text-xs text-red-400">{{ this.errors.middle_name }}</p>
                 </div>
                 <div class="group w-full md:w-1/3">
-                    <label for="last_name" class="text-xs text-gray-400 font-bold">Last name:</label>
+                    <label for="last_name" class="text-xs text-gray-900 font-bold">Last name:</label>
                     <input 
                         type="text" 
                         name="last_name" 
@@ -49,7 +49,7 @@
                     <p class="block h-4 text-xs text-red-400">{{ this.errors.last_name }}</p>
                 </div>
                 <div class="group w-full md:w-1/6">
-                    <label for="extension" class="text-xs text-gray-400 font-bold">Name extension:</label>
+                    <label for="extension" class="text-xs text-gray-900 font-bold">Name extension:</label>
                     <input 
                         type="text" 
                         name="extension" 
@@ -63,13 +63,13 @@
             </div>
             <button @click.prevent="validateUser" class="w-1/6 text-sm text-gray-200 font-bold rounded p-2 bg-blue-600 hover:bg-blue-900">save</button>
         </section>
-        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-2xl font-bold">Account Settings</h1>
             </header>
             <div class="flex justify-center items-center gap-2 mb-2">
                 <div class="group w-full md:w-1/2">
-                    <label for="email" class="text-xs text-gray-400 font-bold">Email:</label>
+                    <label for="email" class="text-xs text-gray-900 font-bold">Email:</label>
                     <input 
                         type="text" 
                         name="email" 
@@ -80,7 +80,7 @@
                     <p class="block h-4 text-xs text-red-400">{{ this.errors.email }}</p>
                 </div>
                 <div class="group w-full md:w-1/2">
-                    <label for="password" class="text-xs text-gray-400 font-bold">Password:</label>
+                    <label for="password" class="text-xs text-gray-900 font-bold">Password:</label>
                     <input 
                         type="password" 
                         name="password" 
@@ -95,7 +95,7 @@
                 <button @click="changePassword" class="mb-2 w-1/6 text-xs text-white p-1 rounded bg-gray-600 hover:bg-gray-700">change password</button>
                 <div v-if="password_change" class="flex justify-center items-center gap-2 mb-2">
                     <div class="group w-full md:w-1/2">
-                        <label for="new_password" class="text-xs text-gray-400 font-bold">New Password:</label>
+                        <label for="new_password" class="text-xs text-gray-900 font-bold">New Password:</label>
                         <input 
                             type="password" 
                             name="new_password" 
@@ -106,7 +106,7 @@
                         <p class="block h-4 text-xs text-red-400">{{ this.errors.password }}</p>
                     </div>
                     <div class="group w-full md:w-1/2">
-                        <label for="password_confirmation" class="text-xs text-gray-400 font-bold">Confirm Password:</label>
+                        <label for="password_confirmation" class="text-xs text-gray-900 font-bold">Confirm Password:</label>
                         <input 
                             type="password" 
                             name="password_confirmation" 

@@ -1,15 +1,15 @@
 <template>
     <div class="w-full min-h-screen flex flex-col justify-center items-center gap-10 py-10">
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="text-gray-200 flex justify-start items-start gap-2">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="text-gray-900 flex justify-start items-start gap-2">
                 <router-link to="/request" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
                     <v-icon name="fa-arrow-left" />
                 </router-link>
                 <h1 class="text-2xl font-bold">Business Permit Requirements</h1>
             </header>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">Barangay Clearance</h1>
             </header>
             <div class="w-full relative h-80 border border-gray-400 block text-gray-400 flex justify-center items-center">
@@ -34,8 +34,8 @@
                 </div>
             </div>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">Application Form</h1>
             </header>
             <div class="w-full h-80 border border-gray-400 block text-gray-400 flex justify-center items-center">
@@ -60,8 +60,8 @@
                 </div>
             </div>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">Cedula</h1>
             </header>
             <div class="w-full h-80 border border-gray-400 block text-gray-400 flex justify-center items-center">
@@ -86,8 +86,8 @@
                 </div>
             </div>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">Business Registration</h1>
             </header>
             <div class="w-full h-80 border border-gray-400 block text-gray-400 flex justify-center items-center">
@@ -112,8 +112,8 @@
                 </div>
             </div>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">BIR Certificate of Registration</h1>
             </header>
             <div class="w-full h-80 border border-gray-400 block text-gray-400 flex justify-center items-center">
@@ -138,8 +138,8 @@
                 </div>
             </div>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">Notarized Contract of Lease</h1>
             </header>
             <div class="w-full h-80 border border-gray-400 block text-gray-400 flex justify-center items-center">
@@ -164,8 +164,8 @@
                 </div>
             </div>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-slate-900">
-            <header class="mb-5 text-gray-200">
+        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">ECC or CNC (if applicable DENR)</h1>
             </header>
             <div class="w-full h-80 border border-gray-400 block text-gray-400 flex justify-center items-center">

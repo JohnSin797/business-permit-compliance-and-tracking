@@ -1,6 +1,6 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
-        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-slate-900">
+        <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="mb-5 text-gray-200 flex justify-start items-center gap-2">
                 <router-link to="/business" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
                     <v-icon name="fa-arrow-left" />
@@ -10,7 +10,7 @@
             <form @submit.prevent="handleSubmit">
                 <div class="mb-2 w-full flex flex-col md:flex-row gap-2">
                     <div class="group w-full md:w-1/2">
-                        <label for="business_name" class="text-gray-400 text-xs font-bold">Business Name</label>
+                        <label for="business_name" class="text-gray-900 text-xs font-bold">Business Name</label>
                         <input 
                             type="text" 
                             name="business_name" 
@@ -22,7 +22,7 @@
                         />
                     </div>
                     <div class="group w-full md:w-1/2">
-                        <label for="date_established" class="text-gray-400 text-xs font-bold">Date of Establishment</label>
+                        <label for="date_established" class="text-gray-900 text-xs font-bold">Date of Establishment</label>
                         <input 
                             type="date" 
                             name="date_established" 
@@ -35,7 +35,7 @@
                 </div>
                 <div class="mb-2 w-full flex flex-col md:flex-row gap-2">
                     <div class="group w-full md:w-1/2">
-                        <label for="business_address" class="text-gray-400 text-xs font-bold">Business Address</label>
+                        <label for="business_address" class="text-gray-900 text-xs font-bold">Business Address</label>
                         <input 
                             type="text" 
                             name="business_address" 
@@ -46,7 +46,7 @@
                         />
                     </div>
                     <div class="group w-full md:w-1/2">
-                        <label for="type_of_organization" class="text-gray-400 text-xs font-bold">Type of Organization</label>
+                        <label for="type_of_organization" class="text-gray-900 text-xs font-bold">Type of Organization</label>
                         <select 
                             name="type_of_organization" 
                             id="type_of_organization" 
@@ -69,7 +69,7 @@
                 </div>
                 <div class="mb-2 w-full flex flex-col md:flex-row gap-2">
                     <div class="group w-full md:w-1/2">
-                        <label for="dti_registration_number" class="text-gray-400 text-xs font-bold">DTI Registration Number</label>
+                        <label for="dti_registration_number" class="text-gray-900 text-xs font-bold">DTI Registration Number</label>
                         <input 
                             type="text" 
                             name="dti_registration_number" 
@@ -81,7 +81,7 @@
                         />
                     </div>
                     <div class="group w-full md:w-1/2">
-                        <label for="tin" class="text-gray-400 text-xs font-bold">TIN</label>
+                        <label for="tin" class="text-gray-900 text-xs font-bold">TIN</label>
                         <input 
                             type="text" 
                             name="tin" 
