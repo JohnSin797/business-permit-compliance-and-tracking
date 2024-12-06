@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Mail\VerifyEmail;
 
 class UserController extends Controller
@@ -97,5 +98,27 @@ class UserController extends Controller
         return response()->json([
             'user' => $user
         ]);
+    }
+
+    public function changeProfileImage(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'profile_image' => 'required|file',
+        ]);
+
+        $profile_image_path = 'public/images';
+        $filename = time() . '_' . uniqid() . '.' . $validated['profile_image']->getClientOriginalExtension();
+        $validated['profile_image']->storeAs($profile_image_path, $filename);
+        $final = '/storage/images/'.$filename;
+        $user = User::find($validated['user_id']);
+        $user->update([
+            'profile_image' => $final
+        ]);
+
+        return response()->json([
+            'message' => 'OK',
+            'profile_image' => $final,
+        ], 200);
     }
 }

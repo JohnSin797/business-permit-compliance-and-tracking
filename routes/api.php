@@ -20,6 +20,7 @@ Route::prefix('user')->controller(AuthController::class)->group(function() {
 Route::prefix('post')->controller(AnnouncementController::class)->group(function() {
     Route::get('/', 'index');
     Route::post('/store', 'store');
+    Route::get('/old/{post}', 'oldPosts');
 });
 
 Route::prefix('business')->controller(BusinessController::class)->group(function() {
@@ -34,4 +35,8 @@ Route::prefix('request')->controller(BusinessPermitRequestController::class)->gr
     Route::patch('/delete/{permit}', 'delete');
     Route::delete('/destroy/{permit}', 'destroy');
     Route::patch('/update/{permit}', 'update');
+});
+
+Route::prefix('user')->controller(UserController::class)->group(function() {
+    Route::post('/profile-image', 'changeProfileImage');
 });

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-96 md:h-[560px] flex flex-col justify-center items-center pt-80 pb-10 overflow-y-auto" ref="scrollContainer" @scroll="handleScroll">
+    <div class="w-full h-96 md:h-[500px] mt-16 2xl:h-[560px] overflow-auto" ref="scrollContainer" @scroll="handleScroll">
         <!-- <VerificationForm v-if="isVerified" :handleSubmit="this.handleVerification" /> -->
         <RequestWindow />
         <div class="w-full flex flex-col justify-center items-center gap-10 p-2">
@@ -57,11 +57,23 @@
                 const container = this.$refs.scrollContainer
                 console.log(container.scrollTop, container)
                 if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+                    if (!this.loading)
                     this.getMorePost()
                 }
             },
             getMorePost() {
                 this.loading = true
+                axios.get(`/api/post/old/${this.announcements[this.announcements.length-1].id}`)
+                .then(response => {
+                    const old = response.data?.posts
+                    this.announcements = [...this.announcements, ...old]
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                    this.loading = false
+                })
             },
             handleVerification(code) {
                 const store = useAuthStore()

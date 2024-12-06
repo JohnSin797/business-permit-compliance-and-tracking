@@ -65,8 +65,10 @@
                 })
                 .then(response => {
                     const store = useAuthStore()
+                    const user = response.data?.user
                     store.getToken(response.data?.token)
-                    store.getUser(response.data?.user)
+                    store.getUser(user)
+                    store.setProfileImage(user.profile_image??'/asset/images/default-profile-img.jpg')
                     this.$router.push('/')
                 })
                 .catch(error => {

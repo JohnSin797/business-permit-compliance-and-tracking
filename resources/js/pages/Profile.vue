@@ -4,6 +4,13 @@
             <header class="mb-5 text-gray-200">
                 <h1 class="text-2xl font-bold">User Information</h1>
             </header>
+            <div class="mb-5 flex flex-col justify-center items-center w-60">
+                <div class="w-52 h-52 rounded-full overflow-hidden bg-gray-400 flex justify-center items-center ring-2 ring-cyan-400">
+                    <img :src="profile_image" alt="profile-image" class="" />
+                </div>
+                <input @change="changeProfileImage" accept="image/jpeg, image/jpg" type="file" class="hidden" name="profile-image" id="profile-image" />
+                <label for="profile-image" class="block mt-2 p-1 rounded text-xs text-white cursor-pointer bg-teal-600 hover:bg-teal-900">change profile image</label>
+            </div>
             <div class="flex justify-center items-center gap-2 mb-2">
                 <div class="group w-full md:w-1/3">
                     <label for="first_name" class="text-xs text-gray-400 font-bold">First name:</label>
@@ -127,6 +134,7 @@ import Swal from 'sweetalert2';
                 middle_name: '',
                 last_name: '',
                 extension: '',
+                profile_image: '',
                 email: '',
                 old_password: '',
                 password: '',
@@ -136,11 +144,29 @@ import Swal from 'sweetalert2';
             }
         },
         methods: {
+            changeProfileImage(e) {
+                const store = useAuthStore()
+                const profileImage = e.target.files[0]
+                axios.post('/api/user/profile-image', { user_id: store.user.id, profile_image: profileImage }, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                })
+                .then(response => {
+                    console.log(response)
+                    const img = response.data?.profile_image
+                    this.profile_image = img
+                    store.setProfileImage(img)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
             isLetter(e) {
-  let char = String.fromCharCode(e.keyCode); // Get the character
-  if(/^[A-Za-z]+$/.test(char)) return true; // Match with regex 
-  else e.preventDefault(); // If not match, don't add to input text
-},
+                let char = String.fromCharCode(e.keyCode); // Get the character
+                if(/^[A-Za-z]+$/.test(char)) return true; // Match with regex 
+                else e.preventDefault(); // If not match, don't add to input text
+            },
             getUser() {
                 const store = useAuthStore()
                 const user = store.user
@@ -149,6 +175,7 @@ import Swal from 'sweetalert2';
                 this.last_name = user.last_name
                 this.extension = user.extension
                 this.email = user.email
+                this.profile_image = store.profileImage
             },
             changePassword() {
                 this.password_change = !this.password_change

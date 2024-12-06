@@ -4,6 +4,7 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         authUser: null,
         accessToken: null,
+        profileImage: null,
     }),
     getters: {
         user: (state) => state.authUser,
@@ -19,6 +20,9 @@ export const useAuthStore = defineStore('auth', {
         logout() {
             this.authUser = null;
             this.accessToken = null;
+        },
+        setProfileImage(imageUrl) {
+            this.profileImage = imageUrl
         },
     },
     persist: true

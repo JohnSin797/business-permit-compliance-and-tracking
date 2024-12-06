@@ -9,7 +9,19 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
-        $posts = Announcement::orderBy('created_at')->limit(10)->get();
+        $posts = Announcement::orderByDesc('created_at')->limit(10)->get();
+        return response()->json([
+            'message' => 'OK',
+            'posts' => $posts
+        ], 200);
+    }
+
+    public function oldPosts($post)
+    {
+        $posts = Announcement::where('id', '<', $post)
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
         return response()->json([
             'message' => 'OK',
             'posts' => $posts
