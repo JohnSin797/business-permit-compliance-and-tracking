@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-guest {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('../../public/asset/images/lgu-office-img.jpg') center/cover no-repeat;
+    height: 100vh; /* Full height for example */
+  }
