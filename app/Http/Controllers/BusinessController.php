@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Business;
 use App\Models\User;
+use App\Models\Notification;
 
 class BusinessController extends Controller
 {
@@ -78,6 +79,10 @@ class BusinessController extends Controller
         ]);
         
         $business = Business::create($validated);
+        Notification::create([
+            'user_id' => $validated['user_id'],
+            'content' => 'You have created a new business.'
+        ]);
 
         if ($business) {
             return response()->json([
@@ -115,25 +120,64 @@ class BusinessController extends Controller
     public function delete(Business $business)
     {
         $business->delete();
+        Notification::create([
+            'user_id' => $business->user_id,
+            'content' => 'You have archived '.$business->business_name.'.',
+        ]);
         return response()->json([
             'message' => 'OK',
         ], 200);
     }
 
-    public function archive($id)
+    public function archive(Request $request)
     {
-        $archive = Business::with([
-            'owner' => function ($owner) use($id) {
-                $owner->where('id', $id);
-            }
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $archive = Business::onlyTrashed()->with([
+            'owner' => function ($owner) use($request) {
+                $owner->where('id', $request->user_id);
+            },
+            'permitRequest'
         ])
-            ->where('user_id', $id)
+            ->where('user_id', $request->user_id)
             ->orderByDesc('deleted_at')
             ->get();
         
         return response()->json([
             'message' => 'OK',
             'archive' => $archive
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $business = Business::onlyTrashed()->findOrFail($id);
+        $userId = $business->user_id;
+        $businessName = $business->business_name;
+        $business->forceDelete();
+        Notification::create([
+            'user_id' => $userId,
+            'content' => 'You have permanently deleted '.$businessName.'.',
+        ]);
+        return response()->json([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function restore($id)
+    {
+        $business = Business::withTrashed()->findOrFail($id);
+        $userId = $business->user_id;
+        $businessName = $business->business_name;
+        $business->restore();
+        Notification::create([
+            'user_id' => $userId,
+            'content' => 'You have restored '.$businessName.'.',
+        ]);
+        return response()->json([
+            'message' => 'OK',
         ], 200);
     }
 }

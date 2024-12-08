@@ -3,12 +3,15 @@
         <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="mb-5 text-gray-200 flex justify-between items-center">
                 <h1 class="text-2xl text-slate-900 font-bold">Business Permit Requests</h1>
-                <router-link v-if="userData?.role == 'user'" to="/request/create" class="text-sm hover:text-white bg-blue-400 hover:bg-blue-600 font-bold p-2 rounded">
-                    <v-icon name="md-noteadd-round" />
-                    Create new
-                </router-link>
+                <div v-if="userData?.role == 'user'" class="flex justify-center items-center gap-2">
+                    <router-link to="/request/archive" class="text-sm hover:text-white bg-gray-400 hover:bg-gray-600 font-bold p-2 rounded">Archive</router-link>
+                    <router-link to="/request/create" class="text-sm hover:text-white bg-blue-400 hover:bg-blue-600 font-bold p-2 rounded">
+                        <v-icon name="md-noteadd-round" />
+                        Create new
+                    </router-link>
+                </div>
             </header>
-            <div class="relative w-full h-96 overflow-y-auto">
+            <div class="relative w-full h-80 2xl:h-96 overflow-y-auto">
                 <table class="w-full table-auto md:table-fixed">
                     <thead class="sticky top-0 text-gray-400 bg-slate-900">
                         <tr>
@@ -31,15 +34,6 @@
                                     >
                                         View
                                     </router-link>
-                                    <!-- <button 
-                                        @click="confirmConfirm(request.id)"
-                                        :disabled="request.status!='pending'" 
-                                        v-if="request.status!='confirmed'" 
-                                        :class="`rounded p-2 text-xs font-bold text-gray-200 
-                                        ${request.status != 'pending' ? 'bg-gray-400' : 'bg-indigo-400 hover:bg-indigo-600 hover:text-white'}`"
-                                    >
-                                        Confirm
-                                    </button> -->
                                 </div>
                                 <div v-else class="flex flex-wrap gap-2 justify-center items-center">
                                     <router-link 
@@ -55,17 +49,19 @@
                                     >
                                         View
                                     </router-link>
-                                    <button 
+                                    <router-link
+                                        :to="`/request/edit/${request.id}`"
                                         v-if="request.status=='incomplete'||request.status=='pending'" 
                                         class="rounded p-2 text-xs font-bold bg-blue-500 hover:bg-blue-700 text-gray-200 hover:text-white"
                                     >
                                         Edit
-                                    </button>
+                                    </router-link>
                                     <button 
+                                        @click="confirmArchive(request.id, index)"
                                         v-if="request.status=='incomplete'||request.status=='pending'" 
                                         class="rounded p-2 text-xs font-bold bg-red-400 hover:bg-red-600 text-gray-200 hover:text-white"
                                     >
-                                        Delete
+                                        Archive
                                     </button>
                                 </div>
                             </td>
@@ -90,38 +86,38 @@ import Swal from 'sweetalert2';
             }
         },
         methods: {
-            confirmConfirm(id) {
-                Swal.fire({
-                    title: 'Request Confirmation',
-                    text: 'Are you sure you want to confirm this request?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    showConfirmButton: true,
-                    cancelButtonColor: 'red',
-                    confirmButtonColor: 'indigo',
-                })
-                .then(response => {
-                    if (response.isConfirmed) {
-                        this.confirmRequest(id)
-                    }
-                })
-            },
-            async confirmRequest(id) {
-                await axios.patch(`/api/request/update/${id}`)
-                .then(response => {
-                    console.log(response)
-                    const req = response.data?.request
-                    this.requests = req
-                })
-                .catch(error => {
-                    console.log(error)
-                    Swal.fire({
-                        title: 'Confirmation Error',
-                        text: error?.response?.data?.message,
-                        icon: 'error'
-                    })
-                })
-            },
+            // confirmConfirm(id) {
+            //     Swal.fire({
+            //         title: 'Request Confirmation',
+            //         text: 'Are you sure you want to confirm this request?',
+            //         icon: 'question',
+            //         showCancelButton: true,
+            //         showConfirmButton: true,
+            //         cancelButtonColor: 'red',
+            //         confirmButtonColor: 'indigo',
+            //     })
+            //     .then(response => {
+            //         if (response.isConfirmed) {
+            //             this.confirmRequest(id)
+            //         }
+            //     })
+            // },
+            // async confirmRequest(id) {
+            //     await axios.patch(`/api/request/update/${id}`)
+            //     .then(response => {
+            //         console.log(response)
+            //         const req = response.data?.request
+            //         this.requests = req
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //         Swal.fire({
+            //             title: 'Confirmation Error',
+            //             text: error?.response?.data?.message,
+            //             icon: 'error'
+            //         })
+            //     })
+            // },
             getRequests() {
                 const store = useAuthStore()
                 axios.post('/request', { user_id: store.user.id })
@@ -153,6 +149,31 @@ import Swal from 'sweetalert2';
                 } else {
                     this.getRequests()
                 }
+            },
+            confirmArchive(id, index) {
+                Swal.fire({
+                    title: 'Archive Confirmation',
+                    text: 'Are you sure you want to archive permit request?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                })
+                .then(response => {
+                    if (response.isConfirmed) {
+                        this.archivePermit(id, index)
+                    }
+                })
+            },
+            archivePermit(id, index) {
+                axios.delete(`/api/request/delete/${id}`)
+                .then(() => {
+                    const temp = [...this.requests]
+                    temp.splice(index, 1)
+                    this.requests = temp
+                })
+                .catch(error => {
+                    console.log(error)
+                })
             },
         },
         mounted() {

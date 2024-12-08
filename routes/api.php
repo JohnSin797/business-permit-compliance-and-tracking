@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\BusinessPermitRequestController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -27,17 +28,28 @@ Route::prefix('business')->controller(BusinessController::class)->group(function
     Route::get('/show/{business}', 'show');
     Route::put('/edit/{business}', 'update');
     Route::patch('/delete/{business}', 'delete');
-    Route::get('/archive/{$id}', 'archive');
+    Route::delete('/destroy/{id}', 'destroy');
+    Route::post('/archive', 'archive');
+    Route::patch('/restore/{id}', 'restore');
 });
 
 Route::prefix('request')->controller(BusinessPermitRequestController::class)->group(function() {
-    Route::get('/show/{permit}', 'show');
-    Route::put('/edit/{permit}', 'edit');
-    Route::patch('/delete/{permit}', 'delete');
-    Route::delete('/destroy/{permit}', 'destroy');
+    Route::get('/show/{id}', 'show');
+    Route::get('/edit/{id}', 'edit');
+    Route::post('/edit', 'updatePermit');
+    Route::delete('/delete/{id}', 'delete');
+    Route::delete('/destroy/{id}', 'destroy');
     Route::patch('/update/{permit}', 'update');
+    Route::put('/archive', 'archive');
+    Route::patch('/restore/{id}', 'restore');
 });
 
 Route::prefix('user')->controller(UserController::class)->group(function() {
     Route::post('/profile-image', 'changeProfileImage');
+});
+
+Route::prefix('notification')->controller(NotificationController::class)->group(function() {
+    Route::post('/show/{id}', 'show');
+    Route::delete('/delete/{id}', 'delete');
+    Route::patch('/update/{id}', 'update');
 });

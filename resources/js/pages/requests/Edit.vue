@@ -1,8 +1,9 @@
 <template>
     <div class="w-full min-h-screen flex justify-center items-center">
         <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
-            <header class="mb-5 text-gray-900">
-                <h1 class="text-2xl font-bold">Create Business Permit Request</h1>
+            <header class="mb-5 text-gray-900 flex justify-start items-center gap-2">
+                <router-link to="/request" class="p-1 rounded text-white bg-blue-600 hover:bg-blue-900">back</router-link>
+                <h1 class="text-2xl font-bold">Edit Business Permit Request</h1>
             </header>
             <form @submit.prevent="handleSubmit">
                 <div class="w-full flex flex-col md:flex-row gap-2 mb-2">
@@ -40,10 +41,11 @@ import Swal from 'sweetalert2';
         methods: {
             async getBusiness() {
                 const id = this.$route.params.request_id
-                await axios.get(`/api/request/show/${id}`)
+                await axios.get(`/api/request/edit/${id}`)
                 .then(response => {
+                    console.log(response)
                     const b = response.data?.business
-                    this.business_name = b?.business_name
+                    this.business_name = b?.business?.business_name
                     this.request_type = b?.request_type
                 })
                 .catch(error => {
@@ -52,9 +54,9 @@ import Swal from 'sweetalert2';
             },
             async handleSubmit(event) {
                 event.preventDefault()
-                const id = this.$route.params.request_id_id
-                await axios.put(`/api/request/edit/${id}`, {
-                    business_name: this.business_name,
+                const id = this.$route.params.request_id
+                await axios.post(`/api/request/edit`, {
+                    permit_id: id,
                     request_type: this.request_type
                 })
                 .then(response => {

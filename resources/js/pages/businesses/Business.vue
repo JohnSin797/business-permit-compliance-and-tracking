@@ -12,7 +12,7 @@
                     <router-link to="/business/archive" class="text-sm hover:text-white bg-zinc-400 hover:bg-zinc-600 p-2 rounded">Archive</router-link>
                 </div>
             </header>
-            <div class="w-full h-96 relative overflow-y-auto">
+            <div class="w-full h-80 2xl:h-96 relative overflow-y-auto">
                 <table class="w-full table-auto md:table-fixed">
                     <thead class="sticky top-0 text-gray-400 bg-slate-900">
                         <tr>

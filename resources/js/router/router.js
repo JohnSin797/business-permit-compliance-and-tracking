@@ -12,6 +12,8 @@ import BusinessArchive from "../pages/businesses/Archive.vue";
 import Request from "../pages/requests/Request.vue";
 import RequestCreate from "../pages/requests/Create.vue";
 import RequestView from "../pages/requests/View.vue";
+import RequestEdit from "../pages/requests/Edit.vue";
+import RequestArchive from "../pages/requests/Archive.vue";
 import Requirements from "../pages/requests/Requirements.vue";
 import Profile from "../pages/Profile.vue";
 import Verification from "../pages/Verification.vue";
@@ -86,6 +88,18 @@ const routes = [
         name: 'request-view',
         path: '/request/view/:request_id?',
         component: RequestView,
+        meta: { Layout: true, requiresAdmin: true, verifiedOnly: true }
+    },
+    {
+        name: 'request-edit',
+        path: '/request/edit/:request_id?',
+        component: RequestEdit,
+        meta: { Layout: true, requiresAdmin: true, verifiedOnly: true }
+    },
+    {
+        name: 'request-archive',
+        path: '/request/archive',
+        component: RequestArchive,
         meta: { Layout: true, requiresAdmin: true, verifiedOnly: true }
     },
     {

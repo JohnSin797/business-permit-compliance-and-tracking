@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BusinessPermitRequest;
 use App\Models\PermitRequirement;
+use App\Models\Notification;
+use App\Models\User;
 
 class BusinessPermitRequestController extends Controller
 {
@@ -47,18 +49,40 @@ class BusinessPermitRequestController extends Controller
         ]);
     }
 
-    public function show(BusinessPermitRequest $permit)
+    public function show($id)
     {
-        $permitRequest = $permit->with('requirements')->first();
+        $permitRequest = BusinessPermitRequest::with('requirements')->findOrFail($id);
+        // $permitRequest = $permit->with('requirements')->first();
         return response()->json([
             'message' => 'OK',
             'permit' => $permitRequest
         ], 200);
     }
 
-    public function edit(BusinessPermitRequest $permit)
+    public function edit($id)
     {
+        $permit = BusinessPermitRequest::with('business')->findOrFail($id);
+        return response()->json([
+            'message' => 'OK',
+            'business' => $permit
+        ], 200);
+    }
 
+    public function updatePermit(Request $request)
+    {
+        $validated = $request->validate([
+            'permit_id' => 'required|exists:business_permit_requests,id',
+            'request_type' => 'required'   
+        ]);
+
+        $permit = BusinessPermitRequest::find($validated['permit_id']);
+        $permit->update([
+            'request_type' => $validated['request_type']
+        ]);
+
+        return response()->json([
+            'message' => 'OK'
+        ], 200);
     }
 
     public function update(BusinessPermitRequest $permit)
@@ -74,9 +98,21 @@ class BusinessPermitRequestController extends Controller
         }
 
         $business_request = BusinessPermitRequest::with('business')
-        ->orderByRaw("FIELD(status, 'incomplete', 'pending', 'verified')")
+        ->orderByRaw("FIELD(status, 'incomplete', 'pending', 'confirmed', 'rejected', 'recompile')")
         ->orderByDesc('created_at')
         ->get();
+
+        $business = $permit->business()->first();
+        $content = $business->business_name." request has been confirmed.";
+        Notification::create([
+            'user_id' => $business->user_id,
+            'content' => $content
+        ]); 
+        $admin = User::where('role', 'admin')->first();
+        Notification::create([
+            'user_id' => $admin->id,
+            'content' => $content,
+        ]);
 
         return response()->json([
             'message' => 'OK',
@@ -106,13 +142,41 @@ class BusinessPermitRequestController extends Controller
         return response()->json(['message' => 'Failed to create request'], 400);
     }
 
-    public function delete(BusinessPermitRequest $permit)
+    public function delete($id)
     {
-
+        $permit = BusinessPermitRequest::findOrFail($id);
+        $permit->delete();
+        return response()->json([
+            'message' => 'OK'
+        ], 200);
     }
 
-    public function destroy(BusinessPermitRequest $permit)
+    public function restore($id)
     {
+        $permit = BusinessPermitRequest::onlyTrashed()->findOrFail($id);
+        $permit->restore();
+        return response()->json([
+            'message' => 'OK'
+        ], 200);
+    }
 
+    public function destroy($id)
+    {
+        $permit = BusinessPermitRequest::onlyTrashed()->findOrFail($id);
+        $permit->forceDelete();
+        return response()->json([
+            'message' => 'OK'
+        ], 200);
+    }
+
+    public function archive(Request $request)
+    {
+        $archive = BusinessPermitRequest::onlyTrashed()
+            ->with(['business', 'business.owner'])
+            ->get();
+        return response()->json([
+            'message' => 'OK',
+            'archive' => $archive
+        ], 200);
     }
 }

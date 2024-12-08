@@ -9,7 +9,7 @@
                     Create new
                 </router-link> -->
             </header>
-            <div class="w-full h-96 relative overflow-y-auto">
+            <div class="w-full h-80 2xl:h-96 relative overflow-y-auto">
                 <table class="w-full table-auto md:table-fixed">
                     <thead class="sticky top-0 text-gray-400 bg-slate-900">
                         <tr>
@@ -30,20 +30,12 @@
                                 {{ business.owner.first_name }} {{ business.owner.middle_name }} {{ business.owner.last_name }} {{ business.owner.extension }}
                             </td>
                             <td class="p-2 border-b text-sm text-center text-black font-semibold">{{ business?.type_of_organization }}</td>
-                            <td class="p-2 border-b text-center text-indigo-900 font-bold">{{ getStatus(business.permit_request) }}</td>
+                            <td class="p-2 border-b text-center text-indigo-900 font-bold">{{ business.permit_request.status }}</td>
                             <!-- <td>{{  }}</td> -->
                              <td class="p-2 border-b">
                                 <div class="flex flex-wrap gap-2 justify-center items-center">
-                                    <!-- <button class="rounded p-2 text-xs font-bold bg-indigo-500 hover:bg-indigo-700 text-gray-200 hover:text-white">Request</button> -->
-                                    <router-link 
-                                        class="rounded p-2 text-xs font-bold bg-indigo-500 hover:bg-indigo-700 text-gray-200 hover:text-white" 
-                                        :to="'/request/create/'+business.id"
-                                    >
-                                        Request
-                                    </router-link>
-                                    <router-link :to="`/business/view/${business.id}`" class="block rounded p-2 text-xs font-bold bg-green-500 hover:bg-green-700 text-gray-200 hover:text-white">View</router-link>
-                                    <router-link :to="`/business/edit/${business.id}`" class="block rounded p-2 text-xs font-bold bg-blue-500 hover:bg-blue-700 text-gray-200 hover:text-white">Edit</router-link>
-                                    <button @click="confirmDelete(business.id)" class="rounded p-2 text-xs font-bold bg-red-400 hover:bg-red-600 text-gray-200 hover:text-white">Archive</button>
+                                    <button @click="confirmRestore(business.id, index)" class="rounded p-2 text-xs font-bold bg-green-400 hover:bg-green-600 text-gray-200 hover:text-white">Restore</button>
+                                    <button @click="confirmDelete(business.id, index)" class="rounded p-2 text-xs font-bold bg-red-400 hover:bg-red-600 text-gray-200 hover:text-white">Delete</button>
                                 </div>
                              </td>
                         </tr>
@@ -57,6 +49,7 @@
 <script>
 import axios from 'axios';
 import { useAuthStore } from '../../stores/auth';
+import Swal from 'sweetalert2';
 
     export default {
         data() {
@@ -68,10 +61,65 @@ import { useAuthStore } from '../../stores/auth';
             async getData() {
                 const store = useAuthStore()
                 const id = store.user.id
-                await axios.get(`/api/business/archive/${id}`)
+                await axios.post(`/api/business/archive`, {
+                    user_id: id
+                })
                 .then(response => {
                     console.log(response)
                     this.businesses = response.data?.archive
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+            confirmDelete(id, index) {
+                Swal.fire({
+                    title: 'Delete Business',
+                    text: 'Are you sure you want to permanently delete business?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    cancelButtonColor: 'red',
+                    confirmButtonColor: 'indigo',
+                })
+                .then(response => {
+                    if (response.isConfirmed) {
+                        this.deleteBusiness(id, index)
+                    }
+                })
+            },
+            confirmRestore(id, index) {
+                Swal.fire({
+                    title: 'Restore Business',
+                    text: 'Are you sure you want to restore business?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    cancelButtonColor: 'red',
+                    confirmButtonColor: 'indigo',
+                })
+                .then(response => {
+                    if (response.isConfirmed) {
+                        this.restoreBusiness(id, index)
+                    }
+                })},
+            deleteBusiness(id, index) {
+                axios.delete(`/api/business/destroy/${id}`)
+                .then(() => {
+                    const temp = [...this.businesses]
+                    temp.splice(index, 1)
+                    this.businesses = temp
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+            restoreBusiness(id, index) {
+                axios.patch(`/api/business/restore/${id}`)
+                .then(() => {
+                    const temp = [...this.businesses]
+                    temp.splice(index, 1)
+                    this.businesses = temp
                 })
                 .catch(error => {
                     console.log(error)

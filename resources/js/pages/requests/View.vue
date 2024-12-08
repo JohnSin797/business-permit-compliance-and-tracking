@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full min-h-screen flex flex-col justify-center items-center gap-10 py-10">
+    <div class="w-full min-h-screen flex flex-col justify-center items-center gap-10 py-10 pt-20">
         <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="text-gray-900 flex justify-start items-start gap-2">
                 <router-link to="/request" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
@@ -34,7 +34,7 @@
                 </div>
             </div>
         </section>
-        <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+        <!-- <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">Application Form</h1>
             </header>
@@ -59,7 +59,7 @@
                     </p>
                 </div>
             </div>
-        </section>
+        </section> -->
         <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="mb-5 text-gray-900">
                 <h1 class="text-xl font-bold">Cedula</h1>
@@ -190,10 +190,13 @@
                 </div>
             </div>
         </section>
-        <section v-if="userData?.role=='admin'" class="flex justify-center items-center gap-2 w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0] ">
+        <section v-if="userData?.role=='admin' && request.status=='pending'" class="flex justify-center items-center gap-2 w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <button class="p-2 rounded text-white text-sm font-bold bg-green-400 hover:bg-green-600">confirm</button>
             <button class="p-2 rounded text-white text-sm font-bold bg-rose-400 hover:bg-rose-600">reject</button>
             <button class="p-2 rounded text-white text-sm font-bold bg-blue-400 hover:bg-blue-600">recompile</button>
+        </section>
+        <section v-if="request.status!='pending'" class="flex justify-center items-center gap-2 w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
+            <h1 class="text-xl font-bold">{{ request.status }}</h1>
         </section>
     </div>
 </template>
@@ -214,6 +217,38 @@ import Swal from 'sweetalert2';
             }
         },
         methods: {
+            confirmConfirm() {
+                Swal.fire({
+                    title: 'Request Confirmation',
+                    text: 'Are you sure you want to confirm this request?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    cancelButtonColor: 'red',
+                    confirmButtonColor: 'indigo',
+                })
+                .then(response => {
+                    if (response.isConfirmed) {
+                        this.confirmRequest(id)
+                    }
+                })
+            },
+            async confirmRequest() {
+                await axios.patch(`/api/request/update/${this.request.id}`)
+                .then(response => {
+                    console.log(response)
+                    // const req = response.data?.request
+                    // this.requests = req
+                })
+                .catch(error => {
+                    console.log(error)
+                    Swal.fire({
+                        title: 'Confirmation Error',
+                        text: error?.response?.data?.message,
+                        icon: 'error'
+                    })
+                })
+            },
             async getData() {
                 const id = this.$route.params.request_id
                 await axios.get(`/api/request/show/${id}`)

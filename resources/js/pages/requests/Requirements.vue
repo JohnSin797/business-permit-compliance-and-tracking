@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full min-h-screen flex justify-center items-center">
+    <div class="w-full min-h-screen flex justify-center items-center pt-20">
         <section class="w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="flex justify-start items-start gap-2">
                 <router-link to="/request" class="block p-2 rounded text-white bg-blue-400 hover:bg-blue-600">
