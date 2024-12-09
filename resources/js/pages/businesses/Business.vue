@@ -3,7 +3,7 @@
         <section class="w-full md:w-4/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <header class="mb-5 text-gray-200 flex items-center justify-between">
                 <h1 class="text-2xl text-slate-900 font-bold">Businesses</h1>
-                <input @change="handleSearch" v-if="userData?.role=='admin'" type="text" name="" id="" class="p-2 rounded text-sm text-slate-900 w-1/3" placeholder="Search..." />
+                <input @input="handleSearch" v-if="userData?.role=='admin'" type="text" class="p-2 rounded text-sm text-slate-900 w-1/3" placeholder="Search..." />
                 <div v-if="userData?.role == 'user'" class="flex flex-wrap justify-center items-center gap-2">
                     <router-link to="/business/create" class="text-sm hover:text-white bg-blue-400 hover:bg-blue-600 font-bold p-2 rounded">
                         <v-icon name="md-noteadd-round" />
@@ -81,7 +81,7 @@ import Swal from 'sweetalert2';
                     b.owner?.first_name.toLowerCase().includes(key.toLowerCase()) ||
                     b.owner?.middle_name.toLowerCase().includes(key.toLowerCase()) ||
                     b.owner?.last_name.toLowerCase().includes(key.toLowerCase()) ||
-                    b.owner?.extension.toLowerCase().includes(key.toLowerCase()) ||
+                    b.owner?.extension?.toLowerCase().includes(key.toLowerCase()) ||
                     b.type_of_organization.toLowerCase().includes(key.toLowerCase())
                 )
                 this.businesses = temp

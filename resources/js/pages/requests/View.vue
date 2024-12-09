@@ -191,9 +191,9 @@
             </div>
         </section>
         <section v-if="userData?.role=='admin' && request.status=='pending'" class="flex justify-center items-center gap-2 w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
-            <button class="p-2 rounded text-white text-sm font-bold bg-green-400 hover:bg-green-600">confirm</button>
-            <button class="p-2 rounded text-white text-sm font-bold bg-rose-400 hover:bg-rose-600">reject</button>
-            <button class="p-2 rounded text-white text-sm font-bold bg-blue-400 hover:bg-blue-600">recompile</button>
+            <button @click="confirmConfirm" class="p-2 rounded text-white text-sm font-bold bg-green-400 hover:bg-green-600">confirm</button>
+            <button @click="confirmReject" class="p-2 rounded text-white text-sm font-bold bg-rose-400 hover:bg-rose-600">reject</button>
+            <button @click="confirmRecompile" class="p-2 rounded text-white text-sm font-bold bg-blue-400 hover:bg-blue-600">recompile</button>
         </section>
         <section v-if="request.status!='pending'" class="flex justify-center items-center gap-2 w-full md:w-3/5 rounded-lg shadow-xl p-10 bg-[#87e0e0]">
             <h1 class="text-xl font-bold">{{ request.status }}</h1>
@@ -229,12 +229,13 @@ import Swal from 'sweetalert2';
                 })
                 .then(response => {
                     if (response.isConfirmed) {
-                        this.confirmRequest(id)
+                        this.confirmRequest()
                     }
                 })
             },
-            async confirmRequest() {
-                await axios.patch(`/api/request/update/${this.request.id}`)
+            confirmRequest() {
+                const id = this.$route.params.request_id
+                axios.patch(`/api/request/update/${id}`, { status: 'confirmed' })
                 .then(response => {
                     console.log(response)
                     // const req = response.data?.request
@@ -268,9 +269,25 @@ import Swal from 'sweetalert2';
                 const store = useAuthStore()
                 this.userData = store.user
             },
-            confirmAccept() {
+            // confirmAccept() {
+            //     Swal.fire({
+            //         title: 'Confirm',
+            //         text: 'Do you want to continue?',
+            //         icon: 'question',
+            //         showCancelButton: true,
+            //         showConfirmButton: true,
+            //         cancelButtonColor: 'red',
+            //         confirmButtonColor: 'indigo'
+            //     })
+            //     .then(response => {
+            //         if (response.isConfirmed) {
+                        
+            //         }
+            //     })
+            // },
+            confirmReject() {
                 Swal.fire({
-                    title: 'Confirm',
+                    title: 'Reject Confirmation',
                     text: 'Do you want to continue?',
                     icon: 'question',
                     showCancelButton: true,
@@ -280,12 +297,46 @@ import Swal from 'sweetalert2';
                 })
                 .then(response => {
                     if (response.isConfirmed) {
-                        
+                        this.rejectRequest()
                     }
                 })
             },
-            confirmReject() {},
-            confirmRecompile() {},
+            rejectRequest() {
+                const id = this.$route.params.request_id
+                axios.patch(`/api/request/update/${id}`, { status: 'rejected' })
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+            confirmRecompile() {
+                Swal.fire({
+                    title: 'Recompile Confirmation',
+                    text: 'Do you want to continue?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    cancelButtonColor: 'red',
+                    confirmButtonColor: 'indigo'
+                })
+                .then(response => {
+                    if (response.isConfirmed) {
+                        this.recompileRequest()
+                    }
+                })
+            },
+            recompileRequest() {
+                const id = this.$route.params.request_id
+                axios.patch(`/api/request/update/${id}`, { status: 'recompile' })
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
         },
         mounted() {
             this.getData()

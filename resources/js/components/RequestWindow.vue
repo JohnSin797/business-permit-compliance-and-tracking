@@ -56,7 +56,6 @@
         },
         methods: {
             countRequest(requestData) {
-                console.log(this.requestData)
                 requestData.map(data => {
                     if (data.status == 'incomplete') {
                         this.incomplete++
@@ -69,15 +68,28 @@
             },
             getRequests() {
                 const store = useAuthStore()
+                const user = store.user
                 const id = store.user.id
-                axios.post('/request', { user_id: id })
-                .then(response => {
-                    console.log(response)
-                    this.countRequest(response.data?.request)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+                if (user.role == 'admin') {
+                    axios.post('/request/admin', { user_id: id })
+                    .then(response => {
+                        this.countRequest(response.data?.request)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                else if (user.role == 'user') {
+                    axios.post('/request', { user_id: id })
+                    .then(response => {
+                        console.log(response)
+                        this.countRequest(response.data?.request)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                
             }
         },
         mounted() {

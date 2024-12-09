@@ -19,17 +19,22 @@ class BusinessPermitRequestController extends Controller
         $business_request = BusinessPermitRequest::with([
             'business' => function($business) use($request) {
                 $business->where('user_id', $request->user_id);
-            }
+            },
+            'business.owner'
         ])
         ->whereHas('business', function($b) use($request) {
             $b->where('user_id', $request->user_id);
         })
-        ->orderByRaw("FIELD(status, 'incomplete', 'pending', 'confirmed', 'validated')")
+        ->orderByRaw("FIELD(status, 'incomplete', 'pending', 'confirmed', 'rejected', 'recompile')")
         ->orderByDesc('created_at')
         ->get();
 
         return response()->json([
             'request' => $business_request,
+            'test' => BusinessPermitRequest::with(['business' => function($business) use($request) {
+                $business->where('user_id', $request->user_id);
+            }, 'business.owner'
+            ])->get()
         ]);
     }
 
@@ -85,11 +90,13 @@ class BusinessPermitRequestController extends Controller
         ], 200);
     }
 
-    public function update(BusinessPermitRequest $permit)
+    public function update(BusinessPermitRequest $permit, Request $request)
     {
-        $result = $permit->update([
-            'status' => 'confirmed'
+        $validated = $request->validate([
+            'status' => 'required'
         ]);
+
+        $result = $permit->update($validated);
 
         if (!$result) {
             return response()->json([
@@ -103,7 +110,7 @@ class BusinessPermitRequestController extends Controller
         ->get();
 
         $business = $permit->business()->first();
-        $content = $business->business_name." request has been confirmed.";
+        $content = $business->business_name." request has been ".$validated['status'].".";
         Notification::create([
             'user_id' => $business->user_id,
             'content' => $content
