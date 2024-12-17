@@ -16,6 +16,7 @@ Route::get('/user', function (Request $request) {
 Route::prefix('user')->controller(AuthController::class)->group(function() {
     Route::post('/login', 'login');
     Route::post('/register', 'register');
+    Route::get('/', 'index');
 });
 
 Route::prefix('post')->controller(AnnouncementController::class)->group(function() {

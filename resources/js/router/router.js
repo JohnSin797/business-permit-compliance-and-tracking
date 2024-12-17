@@ -17,6 +17,7 @@ import RequestArchive from "../pages/requests/Archive.vue";
 import Requirements from "../pages/requests/Requirements.vue";
 import Profile from "../pages/Profile.vue";
 import Verification from "../pages/Verification.vue";
+import Users from "../pages/users/Users.vue";
 
 const routes = [
     {
@@ -112,6 +113,12 @@ const routes = [
         name: 'profile',
         path: '/profile',
         component: Profile,
+        meta: { Layout: true, requiresAuth: true, verifiedOnly: true }
+    },
+    {
+        name: 'users',
+        path: '/users',
+        component: Users,
         meta: { Layout: true, requiresAuth: true, verifiedOnly: true }
     },
     {

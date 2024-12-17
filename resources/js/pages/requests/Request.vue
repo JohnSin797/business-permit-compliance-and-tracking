@@ -10,12 +10,14 @@
                         Create new
                     </router-link>
                 </div>
+                <input @input="handleSearch" v-if="userData?.role=='admin'" type="text" class="p-2 rounded text-sm text-slate-900 w-1/3" placeholder="Search..." />
             </header>
             <div class="relative w-full h-80 2xl:h-96 overflow-y-auto">
                 <table class="w-full table-auto md:table-fixed">
                     <thead class="sticky top-0 text-gray-400 bg-slate-900">
                         <tr>
                             <th>Business</th>
+                            <th v-if="userData.role=='admin'">Owner</th>
                             <th>Type</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -24,6 +26,12 @@
                     <tbody>
                         <tr v-for="(request, index) in this.requests" :key="index">
                             <td class="p-2 border-b text-center text-blue-900 font-bold">{{ request.business.business_name }}</td>
+                            <td v-if="userData.role=='admin'" class="p-2 border-b text-center text-gray-900">
+                                <span>{{ request.business.owner.first_name }} </span>
+                                <span>{{ request.business.owner.middle_name_name }} </span>
+                                <span>{{ request.business.owner.last_name }} </span>
+                                <span>{{ request.business.owner.extension }} </span>
+                            </td>
                             <td class="p-2 border-b text-center text-gray-900">{{ request.request_type }}</td>
                             <td class="p-2 border-b text-center text-green-900 font-semibold">{{ request.status }}</td>
                             <td class="p-2 border-b">
@@ -82,48 +90,31 @@ import Swal from 'sweetalert2';
         data() {
             return {
                 requests: [],
+                requestsArr: [],
                 userData: {},
             }
         },
         methods: {
-            // confirmConfirm(id) {
-            //     Swal.fire({
-            //         title: 'Request Confirmation',
-            //         text: 'Are you sure you want to confirm this request?',
-            //         icon: 'question',
-            //         showCancelButton: true,
-            //         showConfirmButton: true,
-            //         cancelButtonColor: 'red',
-            //         confirmButtonColor: 'indigo',
-            //     })
-            //     .then(response => {
-            //         if (response.isConfirmed) {
-            //             this.confirmRequest(id)
-            //         }
-            //     })
-            // },
-            // async confirmRequest(id) {
-            //     await axios.patch(`/api/request/update/${id}`)
-            //     .then(response => {
-            //         console.log(response)
-            //         const req = response.data?.request
-            //         this.requests = req
-            //     })
-            //     .catch(error => {
-            //         console.log(error)
-            //         Swal.fire({
-            //             title: 'Confirmation Error',
-            //             text: error?.response?.data?.message,
-            //             icon: 'error'
-            //         })
-            //     })
-            // },
+            handleSearch(event) {
+                const key = event.target.value
+                const temp = this.requestsArr.filter(r => 
+                    r.business.business_name.toLowerCase().includes(key.toLowerCase()) ||
+                    r.business.business_address.toLowerCase().includes(key.toLowerCase()) ||
+                    r.business.owner?.first_name.toLowerCase().includes(key.toLowerCase()) ||
+                    r.business.owner?.middle_name.toLowerCase().includes(key.toLowerCase()) ||
+                    r.business.owner?.last_name.toLowerCase().includes(key.toLowerCase()) ||
+                    r.business.owner?.extension?.toLowerCase().includes(key.toLowerCase()) ||
+                    r.business.type_of_organization.toLowerCase().includes(key.toLowerCase())
+                )
+                this.requests = temp
+            },
             getRequests() {
                 const store = useAuthStore()
                 axios.post('/request', { user_id: store.user.id })
                 .then(response => {
-                    this.requests = response.data?.request
-                    console.log(response)
+                    const req = response.data?.request
+                    this.requests = req
+                    this.requestsArr = req
                 })
                 .catch(error => {
                     console.log(error)
@@ -132,8 +123,9 @@ import Swal from 'sweetalert2';
             getAllRequests(id) {
                 axios.post('/request/admin', { user_id: id })
                 .then(response => {
-                    console.log(response)
-                    this.requests = response.data?.request
+                    const req = response.data?.request
+                    this.requests = req
+                    this.requestsArr = req
                 })
                 .catch(error => {
                     console.log(error)

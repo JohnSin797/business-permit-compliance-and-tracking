@@ -121,4 +121,13 @@ class UserController extends Controller
             'profile_image' => $final,
         ], 200);
     }
+
+    public function index()
+    {
+        $users = User::all();
+        return response()->json([
+            'message' => 'OK',
+            'users' => $users
+        ], 200);
+    }
 }

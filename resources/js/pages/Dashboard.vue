@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-96 md:h-[500px] mt-16 2xl:h-[655px] overflow-auto px-3 md:px-20" ref="scrollContainer" @scroll="handleScroll">
+    <div class="w-full h-[500px] mt-16 2xl:h-[655px] overflow-auto px-3 md:px-20" ref="scrollContainer" @scroll="handleScroll">
         <!-- <VerificationForm v-if="isVerified" :handleSubmit="this.handleVerification" /> -->
         <RequestWindow />
         <div class="w-full flex flex-col justify-center items-center gap-10 p-2">

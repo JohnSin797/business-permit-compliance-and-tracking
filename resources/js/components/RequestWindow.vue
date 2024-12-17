@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex flex-col md:flex-row justify-center items-center gap-2 mb-10 sticky top-0 bg-white">
+    <div class="w-full flex flex-col md:flex-row justify-center items-center gap-2 mb-10 md:sticky top-0 bg-white">
         <section class="w-72 rounded-lg shadow-xl p-5 bg-[#87e0e0]">
             <header class="mb-5 text-slate-900">
                 <h1 class="text-xl font-bold">Incomplete Requests</h1>

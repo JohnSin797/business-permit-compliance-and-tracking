@@ -44,7 +44,7 @@ class BusinessPermitRequestController extends Controller
             'user_id' => 'required|exists:users,id'
         ]);
 
-        $business_request = BusinessPermitRequest::with('business')
+        $business_request = BusinessPermitRequest::with(['business', 'business.owner'])
         ->orderByRaw("FIELD(status, 'incomplete', 'pending', 'verified')")
         ->orderByDesc('created_at')
         ->get();
